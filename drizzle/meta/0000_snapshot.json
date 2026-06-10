@@ -1,0 +1,6974 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "5",
+  "dialect": "mysql",
+  "tables": {
+    "porteight_addresses": {
+      "name": "porteight_addresses",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address": {
+          "autoincrement": false,
+          "name": "address",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "city": {
+          "autoincrement": false,
+          "name": "city",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "state": {
+          "autoincrement": false,
+          "name": "state",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "country": {
+          "autoincrement": false,
+          "name": "country",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pincode": {
+          "autoincrement": false,
+          "name": "pincode",
+          "type": "varchar(6)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_addresses_id": {
+          "name": "porteight_addresses_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "city_state_idx": {
+          "name": "city_state_idx",
+          "columns": [
+            "city",
+            "state"
+          ],
+          "isUnique": false
+        },
+        "full_address_idx": {
+          "name": "full_address_idx",
+          "columns": [
+            "address",
+            "city",
+            "state"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_attachments": {
+      "name": "porteight_attachments",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "s3_key": {
+          "autoincrement": false,
+          "name": "s3_key",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "type": {
+          "autoincrement": false,
+          "name": "type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completed": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "completed",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_attachments_id": {
+          "name": "porteight_attachments_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_bid_boq": {
+      "name": "porteight_bid_boq",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "material_id": {
+          "autoincrement": false,
+          "name": "material_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bid_boq_id": {
+          "name": "porteight_bid_boq_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "material_id_idx": {
+          "name": "material_id_idx",
+          "columns": [
+            "material_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_bid_boq_activities": {
+      "name": "porteight_bid_boq_activities",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "boq_id": {
+          "autoincrement": false,
+          "name": "boq_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "boq_truck_type_id": {
+          "autoincrement": false,
+          "name": "boq_truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "has_slab": {
+          "autoincrement": false,
+          "name": "has_slab",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "boq_rate": {
+          "autoincrement": false,
+          "name": "boq_rate",
+          "type": "double(10,2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gst": {
+          "autoincrement": false,
+          "name": "gst",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bid_boq_activities_id": {
+          "name": "porteight_bid_boq_activities_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "boq_id_idx": {
+          "name": "boq_id_idx",
+          "columns": [
+            "boq_id"
+          ],
+          "isUnique": false
+        },
+        "boq_truck_type_id_idx": {
+          "name": "boq_truck_type_id_idx",
+          "columns": [
+            "boq_truck_type_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_bid_boq_activities_slabs": {
+      "name": "porteight_bid_boq_activities_slabs",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "activity_id": {
+          "autoincrement": false,
+          "name": "activity_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slab_min_value": {
+          "autoincrement": false,
+          "name": "slab_min_value",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slab_max_value": {
+          "autoincrement": false,
+          "name": "slab_max_value",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "boq_rate": {
+          "autoincrement": false,
+          "name": "boq_rate",
+          "type": "double(10,2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bid_boq_activities_slabs_id": {
+          "name": "porteight_bid_boq_activities_slabs_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "activity_id_idx": {
+          "name": "activity_id_idx",
+          "columns": [
+            "activity_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_bid_boq_truck_types": {
+      "name": "porteight_bid_boq_truck_types",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "truck_type_id": {
+          "autoincrement": false,
+          "name": "truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bid_boq_truck_types_id": {
+          "name": "porteight_bid_boq_truck_types_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_bids": {
+      "name": "porteight_bids",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bids_specification_id": {
+          "autoincrement": false,
+          "name": "bids_specification_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bidder_id": {
+          "autoincrement": false,
+          "name": "bidder_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "default": "'sent'",
+          "autoincrement": false,
+          "name": "status",
+          "type": "enum('received','sent','negotiate','po-created','loa-created')",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "negotiate_count": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "negotiate_count",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bids_id": {
+          "name": "porteight_bids_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "bidder_id_idx": {
+          "name": "bidder_id_idx",
+          "columns": [
+            "bidder_id"
+          ],
+          "isUnique": false
+        },
+        "bids_specification_id_idx": {
+          "name": "bids_specification_id_idx",
+          "columns": [
+            "bids_specification_id"
+          ],
+          "isUnique": false
+        },
+        "created_at_idx": {
+          "name": "created_at_idx",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        },
+        "status_idx": {
+          "name": "status_idx",
+          "columns": [
+            "status"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_bids_addresses": {
+      "name": "porteight_bids_addresses",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bids_specification_id": {
+          "autoincrement": false,
+          "name": "bids_specification_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address_id": {
+          "autoincrement": false,
+          "name": "address_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bids_addresses_id": {
+          "name": "porteight_bids_addresses_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "address_id_idx": {
+          "name": "address_id_idx",
+          "columns": [
+            "address_id"
+          ],
+          "isUnique": false
+        },
+        "bids_specification_id_idx": {
+          "name": "bids_specification_id_idx",
+          "columns": [
+            "bids_specification_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_bids_attachments": {
+      "name": "porteight_bids_attachments",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bids_id": {
+          "autoincrement": false,
+          "name": "bids_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "attachment_id": {
+          "autoincrement": false,
+          "name": "attachment_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bids_attachments_id": {
+          "name": "porteight_bids_attachments_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "attachment_id_idx": {
+          "name": "attachment_id_idx",
+          "columns": [
+            "attachment_id"
+          ],
+          "isUnique": false
+        },
+        "bids_id_idx": {
+          "name": "bids_id_idx",
+          "columns": [
+            "bids_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_bids_materials": {
+      "name": "porteight_bids_materials",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bids_id": {
+          "autoincrement": false,
+          "name": "bids_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "material_id": {
+          "autoincrement": false,
+          "name": "material_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity": {
+          "autoincrement": false,
+          "name": "quantity",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "uom": {
+          "autoincrement": false,
+          "name": "uom",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bids_materials_id": {
+          "name": "porteight_bids_materials_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "bids_id_idx": {
+          "name": "bids_id_idx",
+          "columns": [
+            "bids_id"
+          ],
+          "isUnique": false
+        },
+        "material_id_idx": {
+          "name": "material_id_idx",
+          "columns": [
+            "material_id"
+          ],
+          "isUnique": false
+        },
+        "uom_idx": {
+          "name": "uom_idx",
+          "columns": [
+            "uom"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "porteight_bids_materials_bids_id_material_id_unique": {
+          "name": "porteight_bids_materials_bids_id_material_id_unique",
+          "columns": [
+            "bids_id",
+            "material_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_bids_materials_prices": {
+      "name": "porteight_bids_materials_prices",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bid_material_id": {
+          "autoincrement": false,
+          "name": "bid_material_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount": {
+          "autoincrement": false,
+          "name": "amount",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bids_materials_prices_id": {
+          "name": "porteight_bids_materials_prices_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "bid_material_id_idx": {
+          "name": "bid_material_id_idx",
+          "columns": [
+            "bid_material_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_bids_specifications": {
+      "name": "porteight_bids_specifications",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organization_id": {
+          "autoincrement": false,
+          "name": "organization_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pickup_address_id": {
+          "autoincrement": false,
+          "name": "pickup_address_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "autoincrement": false,
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "procurement_mode": {
+          "autoincrement": false,
+          "name": "procurement_mode",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "payment_term_in_days": {
+          "autoincrement": false,
+          "name": "payment_term_in_days",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "submission_deadline": {
+          "autoincrement": false,
+          "name": "submission_deadline",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "based_on": {
+          "default": "'quantity'",
+          "autoincrement": false,
+          "name": "based_on",
+          "type": "enum('trips','quantity')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "varchar(1024)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount": {
+          "autoincrement": false,
+          "name": "amount",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "default": "'draft'",
+          "autoincrement": false,
+          "name": "status",
+          "type": "enum('draft','bid-created','under-negotiation','po-created','loa-created')",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_deleted": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "is_deleted",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bids_specifications_id": {
+          "name": "porteight_bids_specifications_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "based_on_idx": {
+          "name": "based_on_idx",
+          "columns": [
+            "based_on"
+          ],
+          "isUnique": false
+        },
+        "is_deleted_idx": {
+          "name": "is_deleted_idx",
+          "columns": [
+            "is_deleted"
+          ],
+          "isUnique": false
+        },
+        "organization_id_idx": {
+          "name": "organization_id_idx",
+          "columns": [
+            "organization_id"
+          ],
+          "isUnique": false
+        },
+        "pickup_address_id_idx": {
+          "name": "pickup_address_id_idx",
+          "columns": [
+            "pickup_address_id"
+          ],
+          "isUnique": false
+        },
+        "procurement_mode_idx": {
+          "name": "procurement_mode_idx",
+          "columns": [
+            "procurement_mode"
+          ],
+          "isUnique": false
+        },
+        "status_idx": {
+          "name": "status_idx",
+          "columns": [
+            "status"
+          ],
+          "isUnique": false
+        },
+        "submission_deadline_idx": {
+          "name": "submission_deadline_idx",
+          "columns": [
+            "submission_deadline"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_bids_specifications_attachments": {
+      "name": "porteight_bids_specifications_attachments",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "attachment_id": {
+          "autoincrement": false,
+          "name": "attachment_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bids_specification_id": {
+          "autoincrement": false,
+          "name": "bids_specification_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bids_specifications_attachments_id": {
+          "name": "porteight_bids_specifications_attachments_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "attachment_id_idx": {
+          "name": "attachment_id_idx",
+          "columns": [
+            "attachment_id"
+          ],
+          "isUnique": false
+        },
+        "bids_specification_id_idx": {
+          "name": "bids_specification_id_idx",
+          "columns": [
+            "bids_specification_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_bids_specifications_materials": {
+      "name": "porteight_bids_specifications_materials",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bids_specification_id": {
+          "autoincrement": false,
+          "name": "bids_specification_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "material_id": {
+          "autoincrement": false,
+          "name": "material_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity": {
+          "autoincrement": false,
+          "name": "quantity",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "uom": {
+          "autoincrement": false,
+          "name": "uom",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bids_specifications_materials_id": {
+          "name": "porteight_bids_specifications_materials_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "bids_specification_id_idx": {
+          "name": "bids_specification_id_idx",
+          "columns": [
+            "bids_specification_id"
+          ],
+          "isUnique": false
+        },
+        "material_id_idx": {
+          "name": "material_id_idx",
+          "columns": [
+            "material_id"
+          ],
+          "isUnique": false
+        },
+        "uom_idx": {
+          "name": "uom_idx",
+          "columns": [
+            "uom"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "bids_materials_specification_unique": {
+          "name": "bids_materials_specification_unique",
+          "columns": [
+            "bids_specification_id",
+            "material_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_bids_specifications_truck_types": {
+      "name": "porteight_bids_specifications_truck_types",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bids_specification_id": {
+          "autoincrement": false,
+          "name": "bids_specification_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "truck_type_id": {
+          "autoincrement": false,
+          "name": "truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bids_specifications_truck_types_id": {
+          "name": "porteight_bids_specifications_truck_types_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "bids_specification_id_idx": {
+          "name": "bids_specification_id_idx",
+          "columns": [
+            "bids_specification_id"
+          ],
+          "isUnique": false
+        },
+        "truck_type_id_idx": {
+          "name": "truck_type_id_idx",
+          "columns": [
+            "truck_type_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "bids_truck_types_specification_unique": {
+          "name": "bids_truck_types_specification_unique",
+          "columns": [
+            "bids_specification_id",
+            "truck_type_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_bids_truck_types": {
+      "name": "porteight_bids_truck_types",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bids_id": {
+          "autoincrement": false,
+          "name": "bids_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "truck_type_id": {
+          "autoincrement": false,
+          "name": "truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bids_truck_types_id": {
+          "name": "porteight_bids_truck_types_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "bids_id_idx": {
+          "name": "bids_id_idx",
+          "columns": [
+            "bids_id"
+          ],
+          "isUnique": false
+        },
+        "truck_type_id_idx": {
+          "name": "truck_type_id_idx",
+          "columns": [
+            "truck_type_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "porteight_bids_truck_types_bids_id_truck_type_id_unique": {
+          "name": "porteight_bids_truck_types_bids_id_truck_type_id_unique",
+          "columns": [
+            "bids_id",
+            "truck_type_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_bids_truck_types_rate": {
+      "name": "porteight_bids_truck_types_rate",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bid_truck_type_id": {
+          "autoincrement": false,
+          "name": "bid_truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount": {
+          "autoincrement": false,
+          "name": "amount",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_bids_truck_types_rate_id": {
+          "name": "porteight_bids_truck_types_rate_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "bid_truck_type_id_idx": {
+          "name": "bid_truck_type_id_idx",
+          "columns": [
+            "bid_truck_type_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_billing_history": {
+      "name": "porteight_billing_history",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organizationsId": {
+          "autoincrement": false,
+          "name": "organizationsId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "autoincrement": false,
+          "name": "status",
+          "type": "enum('not_started','executing','success','failed')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "no_of_trucks": {
+          "autoincrement": false,
+          "name": "no_of_trucks",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "planId": {
+          "autoincrement": false,
+          "name": "planId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cgst": {
+          "autoincrement": false,
+          "name": "cgst",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sgst": {
+          "autoincrement": false,
+          "name": "sgst",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "igst": {
+          "autoincrement": false,
+          "name": "igst",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount": {
+          "autoincrement": false,
+          "name": "amount",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_billing_history_id": {
+          "name": "porteight_billing_history_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "organizations_id_idx": {
+          "name": "organizations_id_idx",
+          "columns": [
+            "organizationsId"
+          ],
+          "isUnique": false
+        },
+        "plan_id_idx": {
+          "name": "plan_id_idx",
+          "columns": [
+            "planId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_boq": {
+      "name": "porteight_boq",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "material_id": {
+          "autoincrement": false,
+          "name": "material_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_boq_id": {
+          "name": "porteight_boq_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "material_id_idx": {
+          "name": "material_id_idx",
+          "columns": [
+            "material_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_boq_activities": {
+      "name": "porteight_boq_activities",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "boq_id": {
+          "autoincrement": false,
+          "name": "boq_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "boq_truck_type_id": {
+          "autoincrement": false,
+          "name": "boq_truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "has_slab": {
+          "autoincrement": false,
+          "name": "has_slab",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "boq_rate": {
+          "autoincrement": false,
+          "name": "boq_rate",
+          "type": "double(10,2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gst": {
+          "autoincrement": false,
+          "name": "gst",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_boq_activities_id": {
+          "name": "porteight_boq_activities_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "boq_id_idx": {
+          "name": "boq_id_idx",
+          "columns": [
+            "boq_id"
+          ],
+          "isUnique": false
+        },
+        "boq_truck_type_id_idx": {
+          "name": "boq_truck_type_id_idx",
+          "columns": [
+            "boq_truck_type_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_boq_activities_slabs": {
+      "name": "porteight_boq_activities_slabs",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "activity_id": {
+          "autoincrement": false,
+          "name": "activity_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slab_min_value": {
+          "autoincrement": false,
+          "name": "slab_min_value",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slab_max_value": {
+          "autoincrement": false,
+          "name": "slab_max_value",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "boq_rate": {
+          "autoincrement": false,
+          "name": "boq_rate",
+          "type": "double(10,2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_boq_activities_slabs_id": {
+          "name": "porteight_boq_activities_slabs_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "activity_id_idx": {
+          "name": "activity_id_idx",
+          "columns": [
+            "activity_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_boq_truck_types": {
+      "name": "porteight_boq_truck_types",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "truck_type_id": {
+          "autoincrement": false,
+          "name": "truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_boq_truck_types_id": {
+          "name": "porteight_boq_truck_types_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_contacts": {
+      "name": "porteight_contacts",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mobile": {
+          "autoincrement": false,
+          "name": "mobile",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "autoincrement": false,
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "org_id": {
+          "autoincrement": false,
+          "name": "org_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_contacts_id": {
+          "name": "porteight_contacts_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "email_idx": {
+          "name": "email_idx",
+          "columns": [
+            "email"
+          ],
+          "isUnique": false
+        },
+        "mobile_idx": {
+          "name": "mobile_idx",
+          "columns": [
+            "mobile"
+          ],
+          "isUnique": false
+        },
+        "org_id_idx": {
+          "name": "org_id_idx",
+          "columns": [
+            "org_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_drivers": {
+      "name": "porteight_drivers",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organization_id": {
+          "autoincrement": false,
+          "name": "organization_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mobile": {
+          "autoincrement": false,
+          "name": "mobile",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address_id": {
+          "autoincrement": false,
+          "name": "address_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dl_no": {
+          "autoincrement": false,
+          "name": "dl_no",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dob": {
+          "autoincrement": false,
+          "name": "dob",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "default": "'free'",
+          "autoincrement": false,
+          "name": "status",
+          "type": "enum('busy','free')",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isDeleted": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "isDeleted",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_drivers_id": {
+          "name": "porteight_drivers_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "address_id_idx": {
+          "name": "address_id_idx",
+          "columns": [
+            "address_id"
+          ],
+          "isUnique": false
+        },
+        "dl_no_idx": {
+          "name": "dl_no_idx",
+          "columns": [
+            "dl_no"
+          ],
+          "isUnique": false
+        },
+        "is_deleted_idx": {
+          "name": "is_deleted_idx",
+          "columns": [
+            "isDeleted"
+          ],
+          "isUnique": false
+        },
+        "name_idx": {
+          "name": "name_idx",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        },
+        "organization_id_idx": {
+          "name": "organization_id_idx",
+          "columns": [
+            "organization_id"
+          ],
+          "isUnique": false
+        },
+        "status_idx": {
+          "name": "status_idx",
+          "columns": [
+            "status"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "porteight_drivers_mobile_unique": {
+          "name": "porteight_drivers_mobile_unique",
+          "columns": [
+            "mobile"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_fastag_bank": {
+      "name": "porteight_fastag_bank",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bank_name": {
+          "autoincrement": false,
+          "name": "bank_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_fastag_bank_id": {
+          "name": "porteight_fastag_bank_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_fastag_transactions": {
+      "name": "porteight_fastag_transactions",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "autoincrement": false,
+          "name": "type",
+          "type": "enum('credit','debit')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organization_id": {
+          "autoincrement": false,
+          "name": "organization_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transaction_id": {
+          "autoincrement": false,
+          "name": "transaction_id",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "customer_name": {
+          "autoincrement": false,
+          "name": "customer_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mobile_no": {
+          "autoincrement": false,
+          "name": "mobile_no",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "owner_name": {
+          "autoincrement": false,
+          "name": "owner_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "autoincrement": false,
+          "name": "amount",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "truck_id": {
+          "autoincrement": false,
+          "name": "truck_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "closing_balance": {
+          "autoincrement": false,
+          "name": "closing_balance",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transaction_date_time": {
+          "autoincrement": false,
+          "name": "transaction_date_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "location": {
+          "autoincrement": false,
+          "name": "location",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_fastag_transactions_id": {
+          "name": "porteight_fastag_transactions_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "mobile_no_idx": {
+          "name": "mobile_no_idx",
+          "columns": [
+            "mobile_no"
+          ],
+          "isUnique": false
+        },
+        "organization_id_idx": {
+          "name": "organization_id_idx",
+          "columns": [
+            "organization_id"
+          ],
+          "isUnique": false
+        },
+        "transaction_date_time_idx": {
+          "name": "transaction_date_time_idx",
+          "columns": [
+            "transaction_date_time"
+          ],
+          "isUnique": false
+        },
+        "transaction_id_idx": {
+          "name": "transaction_id_idx",
+          "columns": [
+            "transaction_id"
+          ],
+          "isUnique": false
+        },
+        "truck_id_idx": {
+          "name": "truck_id_idx",
+          "columns": [
+            "truck_id"
+          ],
+          "isUnique": false
+        },
+        "type_idx": {
+          "name": "type_idx",
+          "columns": [
+            "type"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "porteight_fastag_transactions_transaction_id_unique": {
+          "name": "porteight_fastag_transactions_transaction_id_unique",
+          "columns": [
+            "transaction_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_invoice_materials": {
+      "name": "porteight_invoice_materials",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "invoice_id": {
+          "autoincrement": false,
+          "name": "invoice_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "truck_type_id": {
+          "autoincrement": false,
+          "name": "truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "no_of_trips": {
+          "autoincrement": false,
+          "name": "no_of_trips",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "material_id": {
+          "autoincrement": false,
+          "name": "material_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quantity": {
+          "autoincrement": false,
+          "name": "quantity",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hsn_code": {
+          "autoincrement": false,
+          "name": "hsn_code",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "discount": {
+          "autoincrement": false,
+          "name": "discount",
+          "type": "double(10,2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gst": {
+          "autoincrement": false,
+          "name": "gst",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cgst": {
+          "autoincrement": false,
+          "name": "cgst",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sgst": {
+          "autoincrement": false,
+          "name": "sgst",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "igst": {
+          "autoincrement": false,
+          "name": "igst",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_invoice_materials_id": {
+          "name": "porteight_invoice_materials_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "hsn_code_idx": {
+          "name": "hsn_code_idx",
+          "columns": [
+            "hsn_code"
+          ],
+          "isUnique": false
+        },
+        "invoice_id_idx": {
+          "name": "invoice_id_idx",
+          "columns": [
+            "invoice_id"
+          ],
+          "isUnique": false
+        },
+        "material_id_idx": {
+          "name": "material_id_idx",
+          "columns": [
+            "material_id"
+          ],
+          "isUnique": false
+        },
+        "truck_type_id_idx": {
+          "name": "truck_type_id_idx",
+          "columns": [
+            "truck_type_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "porteight_invoice_materials_invoice_id_material_id_unique": {
+          "name": "porteight_invoice_materials_invoice_id_material_id_unique",
+          "columns": [
+            "invoice_id",
+            "material_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_invoice_trips": {
+      "name": "porteight_invoice_trips",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "invoice_id": {
+          "autoincrement": false,
+          "name": "invoice_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trip_id": {
+          "autoincrement": false,
+          "name": "trip_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "po_id": {
+          "autoincrement": false,
+          "name": "po_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_invoice_trips_id": {
+          "name": "porteight_invoice_trips_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "invoice_id_idx": {
+          "name": "invoice_id_idx",
+          "columns": [
+            "invoice_id"
+          ],
+          "isUnique": false
+        },
+        "po_id_idx": {
+          "name": "po_id_idx",
+          "columns": [
+            "po_id"
+          ],
+          "isUnique": false
+        },
+        "trip_id_idx": {
+          "name": "trip_id_idx",
+          "columns": [
+            "trip_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "porteight_invoice_trips_invoice_id_trip_id_unique": {
+          "name": "porteight_invoice_trips_invoice_id_trip_id_unique",
+          "columns": [
+            "invoice_id",
+            "trip_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_invoice_truck_types": {
+      "name": "porteight_invoice_truck_types",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "invoice_id": {
+          "autoincrement": false,
+          "name": "invoice_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "truck_type_id": {
+          "autoincrement": false,
+          "name": "truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "discount": {
+          "autoincrement": false,
+          "name": "discount",
+          "type": "double(10,2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gst": {
+          "autoincrement": false,
+          "name": "gst",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cgst": {
+          "autoincrement": false,
+          "name": "cgst",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sgst": {
+          "autoincrement": false,
+          "name": "sgst",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "igst": {
+          "autoincrement": false,
+          "name": "igst",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_invoice_truck_types_id": {
+          "name": "porteight_invoice_truck_types_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "invoice_id_idx": {
+          "name": "invoice_id_idx",
+          "columns": [
+            "invoice_id"
+          ],
+          "isUnique": false
+        },
+        "truck_type_id_idx": {
+          "name": "truck_type_id_idx",
+          "columns": [
+            "truck_type_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "porteight_invoice_truck_types_invoice_id_truck_type_id_unique": {
+          "name": "porteight_invoice_truck_types_invoice_id_truck_type_id_unique",
+          "columns": [
+            "invoice_id",
+            "truck_type_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_invoices": {
+      "name": "porteight_invoices",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "invoice_no": {
+          "autoincrement": false,
+          "name": "invoice_no",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "invoice_date": {
+          "autoincrement": false,
+          "name": "invoice_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "default": "'unpaid'",
+          "autoincrement": false,
+          "name": "status",
+          "type": "enum('unpaid','paid')",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "approved": {
+          "autoincrement": false,
+          "name": "approved",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount": {
+          "autoincrement": false,
+          "name": "amount",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_invoices_id": {
+          "name": "porteight_invoices_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "approved_idx": {
+          "name": "approved_idx",
+          "columns": [
+            "approved"
+          ],
+          "isUnique": false
+        },
+        "created_at_idx": {
+          "name": "created_at_idx",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        },
+        "invoice_date_idx": {
+          "name": "invoice_date_idx",
+          "columns": [
+            "invoice_date"
+          ],
+          "isUnique": false
+        },
+        "invoice_no_idx": {
+          "name": "invoice_no_idx",
+          "columns": [
+            "invoice_no"
+          ],
+          "isUnique": false
+        },
+        "status_approved_idx": {
+          "name": "status_approved_idx",
+          "columns": [
+            "status",
+            "approved"
+          ],
+          "isUnique": false
+        },
+        "status_idx": {
+          "name": "status_idx",
+          "columns": [
+            "status"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_loa": {
+      "name": "porteight_loa",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bid_id": {
+          "autoincrement": false,
+          "name": "bid_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bid_specification_id": {
+          "autoincrement": false,
+          "name": "bid_specification_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "default": "'awarded'",
+          "autoincrement": false,
+          "name": "status",
+          "type": "enum('awarded','accepted')",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "loa_given_to_id": {
+          "autoincrement": false,
+          "name": "loa_given_to_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "loa_given_by_id": {
+          "autoincrement": false,
+          "name": "loa_given_by_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "varchar(2048)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_loa_id": {
+          "name": "porteight_loa_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "bid_id_idx": {
+          "name": "bid_id_idx",
+          "columns": [
+            "bid_id"
+          ],
+          "isUnique": false
+        },
+        "bid_specification_id_idx": {
+          "name": "bid_specification_id_idx",
+          "columns": [
+            "bid_specification_id"
+          ],
+          "isUnique": false
+        },
+        "loa_given_by_id_idx": {
+          "name": "loa_given_by_id_idx",
+          "columns": [
+            "loa_given_by_id"
+          ],
+          "isUnique": false
+        },
+        "loa_given_to_id_idx": {
+          "name": "loa_given_to_id_idx",
+          "columns": [
+            "loa_given_to_id"
+          ],
+          "isUnique": false
+        },
+        "status_idx": {
+          "name": "status_idx",
+          "columns": [
+            "status"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_material_attachments": {
+      "name": "porteight_material_attachments",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "material_id": {
+          "autoincrement": false,
+          "name": "material_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "attachment_id": {
+          "autoincrement": false,
+          "name": "attachment_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_material_attachments_id": {
+          "name": "porteight_material_attachments_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "attachment_idx": {
+          "name": "attachment_idx",
+          "columns": [
+            "attachment_id"
+          ],
+          "isUnique": false
+        },
+        "material_idx": {
+          "name": "material_idx",
+          "columns": [
+            "material_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_materials": {
+      "name": "porteight_materials",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hsn_code": {
+          "autoincrement": false,
+          "name": "hsn_code",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_materials_id": {
+          "name": "porteight_materials_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "hsn_code_idx": {
+          "name": "hsn_code_idx",
+          "columns": [
+            "hsn_code"
+          ],
+          "isUnique": false
+        },
+        "name_idx": {
+          "name": "name_idx",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_msme_details": {
+      "name": "porteight_msme_details",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organization_id": {
+          "autoincrement": false,
+          "name": "organization_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "classification_year": {
+          "autoincrement": false,
+          "name": "classification_year",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enterprise_type": {
+          "autoincrement": false,
+          "name": "enterprise_type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_msme_details_id": {
+          "name": "porteight_msme_details_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "organization_id_idx": {
+          "name": "organization_id_idx",
+          "columns": [
+            "organization_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_org_materials": {
+      "name": "porteight_org_materials",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organization_id": {
+          "autoincrement": false,
+          "name": "organization_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "material_id": {
+          "autoincrement": false,
+          "name": "material_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_org_materials_id": {
+          "name": "porteight_org_materials_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "material_id_idx": {
+          "name": "material_id_idx",
+          "columns": [
+            "material_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "org_material_unique": {
+          "name": "org_material_unique",
+          "columns": [
+            "organization_id",
+            "material_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_org_service_locations": {
+      "name": "porteight_org_service_locations",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organization_id": {
+          "autoincrement": false,
+          "name": "organization_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "state": {
+          "autoincrement": false,
+          "name": "state",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_org_service_locations_id": {
+          "name": "porteight_org_service_locations_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "organization_id_idx": {
+          "name": "organization_id_idx",
+          "columns": [
+            "organization_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "service_location_unique": {
+          "name": "service_location_unique",
+          "columns": [
+            "state",
+            "organization_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_org_users": {
+      "name": "porteight_org_users",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organization_id": {
+          "autoincrement": false,
+          "name": "organization_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "autoincrement": false,
+          "name": "type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mobile": {
+          "autoincrement": false,
+          "name": "mobile",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tb_token": {
+          "autoincrement": false,
+          "name": "tb_token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "autoincrement": false,
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_org_users_id": {
+          "name": "porteight_org_users_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "mobile_idx": {
+          "name": "mobile_idx",
+          "columns": [
+            "mobile"
+          ],
+          "isUnique": false
+        },
+        "name_idx": {
+          "name": "name_idx",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        },
+        "organization_id_idx": {
+          "name": "organization_id_idx",
+          "columns": [
+            "organization_id"
+          ],
+          "isUnique": false
+        },
+        "type_idx": {
+          "name": "type_idx",
+          "columns": [
+            "type"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "porteight_org_users_mobile_unique": {
+          "name": "porteight_org_users_mobile_unique",
+          "columns": [
+            "mobile"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_org_users_permissions": {
+      "name": "porteight_org_users_permissions",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "org_user_id": {
+          "autoincrement": false,
+          "name": "org_user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "can_add_trip": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "can_add_trip",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "can_edit_trip": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "can_edit_trip",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "can_delete_trip": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "can_delete_trip",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "can_start_trip": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "can_start_trip",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "can_complete_trip": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "can_complete_trip",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "show_fastag": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "show_fastag",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_org_users_permissions_id": {
+          "name": "porteight_org_users_permissions_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "org_user_id_idx": {
+          "name": "org_user_id_idx",
+          "columns": [
+            "org_user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_org_users_site": {
+      "name": "porteight_org_users_site",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "org_user_id": {
+          "autoincrement": false,
+          "name": "org_user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "site_id": {
+          "autoincrement": false,
+          "name": "site_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_org_users_site_id": {
+          "name": "porteight_org_users_site_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "org_user_id_idx": {
+          "name": "org_user_id_idx",
+          "columns": [
+            "org_user_id"
+          ],
+          "isUnique": false
+        },
+        "site_id_idx": {
+          "name": "site_id_idx",
+          "columns": [
+            "site_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_organization": {
+      "name": "porteight_organization",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address": {
+          "autoincrement": false,
+          "name": "address",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "country": {
+          "autoincrement": false,
+          "name": "country",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "state": {
+          "autoincrement": false,
+          "name": "state",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "city": {
+          "autoincrement": false,
+          "name": "city",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gst": {
+          "autoincrement": false,
+          "name": "gst",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pan": {
+          "autoincrement": false,
+          "name": "pan",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bank_acc_no": {
+          "autoincrement": false,
+          "name": "bank_acc_no",
+          "type": "varchar(18)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ifsc": {
+          "autoincrement": false,
+          "name": "ifsc",
+          "type": "varchar(11)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bank_name": {
+          "autoincrement": false,
+          "name": "bank_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "branch_name": {
+          "autoincrement": false,
+          "name": "branch_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "msme": {
+          "autoincrement": false,
+          "name": "msme",
+          "type": "varchar(19)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "enterprise_name": {
+          "autoincrement": false,
+          "name": "enterprise_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pan_india": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "pan_india",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "autoincrement": false,
+          "name": "user_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_organization_id": {
+          "name": "porteight_organization_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "bank_acc_no_idx": {
+          "name": "bank_acc_no_idx",
+          "columns": [
+            "bank_acc_no"
+          ],
+          "isUnique": false
+        },
+        "gst_idx": {
+          "name": "gst_idx",
+          "columns": [
+            "gst"
+          ],
+          "isUnique": false
+        },
+        "ifsc_idx": {
+          "name": "ifsc_idx",
+          "columns": [
+            "ifsc"
+          ],
+          "isUnique": false
+        },
+        "pan_idx": {
+          "name": "pan_idx",
+          "columns": [
+            "pan"
+          ],
+          "isUnique": false
+        },
+        "user_id_idx": {
+          "name": "user_id_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_organization_attachments": {
+      "name": "porteight_organization_attachments",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organization_id": {
+          "autoincrement": false,
+          "name": "organization_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "attachment_id": {
+          "autoincrement": false,
+          "name": "attachment_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_organization_attachments_id": {
+          "name": "porteight_organization_attachments_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "attachment_id_idx": {
+          "name": "attachment_id_idx",
+          "columns": [
+            "attachment_id"
+          ],
+          "isUnique": false
+        },
+        "organization_id_idx": {
+          "name": "organization_id_idx",
+          "columns": [
+            "organization_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_payments": {
+      "name": "porteight_payments",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "payment_date": {
+          "autoincrement": false,
+          "name": "payment_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "autoincrement": false,
+          "name": "amount",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "payment_mode": {
+          "autoincrement": false,
+          "name": "payment_mode",
+          "type": "enum('cash','cheque','online','other')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transaction_no": {
+          "autoincrement": false,
+          "name": "transaction_no",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_payments_id": {
+          "name": "porteight_payments_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "created_at_idx": {
+          "name": "created_at_idx",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        },
+        "payment_date_idx": {
+          "name": "payment_date_idx",
+          "columns": [
+            "payment_date"
+          ],
+          "isUnique": false
+        },
+        "payment_mode_idx": {
+          "name": "payment_mode_idx",
+          "columns": [
+            "payment_mode"
+          ],
+          "isUnique": false
+        },
+        "transaction_no_idx": {
+          "name": "transaction_no_idx",
+          "columns": [
+            "transaction_no"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_payments_invoices": {
+      "name": "porteight_payments_invoices",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "payment_id": {
+          "autoincrement": false,
+          "name": "payment_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "invoice_id": {
+          "autoincrement": false,
+          "name": "invoice_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_payments_invoices_id": {
+          "name": "porteight_payments_invoices_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "invoice_id_idx": {
+          "name": "invoice_id_idx",
+          "columns": [
+            "invoice_id"
+          ],
+          "isUnique": false
+        },
+        "payment_id_idx": {
+          "name": "payment_id_idx",
+          "columns": [
+            "payment_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "porteight_payments_invoices_invoice_id_payment_id_unique": {
+          "name": "porteight_payments_invoices_invoice_id_payment_id_unique",
+          "columns": [
+            "invoice_id",
+            "payment_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_plan": {
+      "name": "porteight_plan",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price_per_month": {
+          "autoincrement": false,
+          "name": "price_per_month",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price_per_year": {
+          "autoincrement": false,
+          "name": "price_per_year",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "features": {
+          "autoincrement": false,
+          "name": "features",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_plan_id": {
+          "name": "porteight_plan_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_po": {
+      "name": "porteight_po",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bids_id": {
+          "autoincrement": false,
+          "name": "bids_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bid_specification_id": {
+          "autoincrement": false,
+          "name": "bid_specification_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "loa_id": {
+          "autoincrement": false,
+          "name": "loa_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parent_po_id": {
+          "autoincrement": false,
+          "name": "parent_po_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "po_given_to_id": {
+          "autoincrement": false,
+          "name": "po_given_to_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "po_generated_by_id": {
+          "autoincrement": false,
+          "name": "po_generated_by_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "default": "'awarded'",
+          "autoincrement": false,
+          "name": "status",
+          "type": "enum('awarded','accepted','completed','declined')",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pickup_address_id": {
+          "autoincrement": false,
+          "name": "pickup_address_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "po_no": {
+          "autoincrement": false,
+          "name": "po_no",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "po_date": {
+          "autoincrement": false,
+          "name": "po_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "po_validity_date": {
+          "autoincrement": false,
+          "name": "po_validity_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "self_po_external_user_id": {
+          "autoincrement": false,
+          "name": "self_po_external_user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "po_amount": {
+          "autoincrement": false,
+          "name": "po_amount",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "payment_term_in_days": {
+          "autoincrement": false,
+          "name": "payment_term_in_days",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "varchar(2048)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pickup_contact_id": {
+          "autoincrement": false,
+          "name": "pickup_contact_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rating": {
+          "autoincrement": false,
+          "name": "rating",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rating_description": {
+          "autoincrement": false,
+          "name": "rating_description",
+          "type": "varchar(1024)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_sublet": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "is_sublet",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "based_on": {
+          "default": "'quantity'",
+          "autoincrement": false,
+          "name": "based_on",
+          "type": "enum('trips','quantity')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_po_id": {
+          "name": "porteight_po_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "bid_specification_id_idx": {
+          "name": "bid_specification_id_idx",
+          "columns": [
+            "bid_specification_id"
+          ],
+          "isUnique": false
+        },
+        "bids_id_idx": {
+          "name": "bids_id_idx",
+          "columns": [
+            "bids_id"
+          ],
+          "isUnique": false
+        },
+        "loa_id_idx": {
+          "name": "loa_id_idx",
+          "columns": [
+            "loa_id"
+          ],
+          "isUnique": false
+        },
+        "parent_po_id_idx": {
+          "name": "parent_po_id_idx",
+          "columns": [
+            "parent_po_id"
+          ],
+          "isUnique": false
+        },
+        "pickup_address_id_idx": {
+          "name": "pickup_address_id_idx",
+          "columns": [
+            "pickup_address_id"
+          ],
+          "isUnique": false
+        },
+        "pickup_contact_id_idx": {
+          "name": "pickup_contact_id_idx",
+          "columns": [
+            "pickup_contact_id"
+          ],
+          "isUnique": false
+        },
+        "po_date_idx": {
+          "name": "po_date_idx",
+          "columns": [
+            "po_date"
+          ],
+          "isUnique": false
+        },
+        "po_generated_by_id_idx": {
+          "name": "po_generated_by_id_idx",
+          "columns": [
+            "po_generated_by_id"
+          ],
+          "isUnique": false
+        },
+        "po_given_to_id_idx": {
+          "name": "po_given_to_id_idx",
+          "columns": [
+            "po_given_to_id"
+          ],
+          "isUnique": false
+        },
+        "po_no_idx": {
+          "name": "po_no_idx",
+          "columns": [
+            "po_no"
+          ],
+          "isUnique": false
+        },
+        "self_po_external_user_id_idx": {
+          "name": "self_po_external_user_id_idx",
+          "columns": [
+            "self_po_external_user_id"
+          ],
+          "isUnique": false
+        },
+        "status_idx": {
+          "name": "status_idx",
+          "columns": [
+            "status"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_po_addresses": {
+      "name": "porteight_po_addresses",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address_id": {
+          "autoincrement": false,
+          "name": "address_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "po_id": {
+          "autoincrement": false,
+          "name": "po_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lead": {
+          "autoincrement": false,
+          "name": "lead",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chainage": {
+          "autoincrement": false,
+          "name": "chainage",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contact_id": {
+          "autoincrement": false,
+          "name": "contact_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_po_addresses_id": {
+          "name": "porteight_po_addresses_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "address_id_idx": {
+          "name": "address_id_idx",
+          "columns": [
+            "address_id"
+          ],
+          "isUnique": false
+        },
+        "contact_id_idx": {
+          "name": "contact_id_idx",
+          "columns": [
+            "contact_id"
+          ],
+          "isUnique": false
+        },
+        "po_id_idx": {
+          "name": "po_id_idx",
+          "columns": [
+            "po_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_po_attachments": {
+      "name": "porteight_po_attachments",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "po_id": {
+          "autoincrement": false,
+          "name": "po_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "attachment_id": {
+          "autoincrement": false,
+          "name": "attachment_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_po_attachments_id": {
+          "name": "porteight_po_attachments_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "attachment_id_idx": {
+          "name": "attachment_id_idx",
+          "columns": [
+            "attachment_id"
+          ],
+          "isUnique": false
+        },
+        "po_id_idx": {
+          "name": "po_id_idx",
+          "columns": [
+            "po_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_po_boq": {
+      "name": "porteight_po_boq",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "material_id": {
+          "autoincrement": false,
+          "name": "material_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_po_boq_id": {
+          "name": "porteight_po_boq_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "material_id_idx": {
+          "name": "material_id_idx",
+          "columns": [
+            "material_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_po_boq_activities": {
+      "name": "porteight_po_boq_activities",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "boq_id": {
+          "autoincrement": false,
+          "name": "boq_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "boq_truck_type_id": {
+          "autoincrement": false,
+          "name": "boq_truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "has_slab": {
+          "autoincrement": false,
+          "name": "has_slab",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "boq_rate": {
+          "autoincrement": false,
+          "name": "boq_rate",
+          "type": "double(10,2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gst": {
+          "autoincrement": false,
+          "name": "gst",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_po_boq_activities_id": {
+          "name": "porteight_po_boq_activities_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "boq_id_idx": {
+          "name": "boq_id_idx",
+          "columns": [
+            "boq_id"
+          ],
+          "isUnique": false
+        },
+        "boq_truck_type_id_idx": {
+          "name": "boq_truck_type_id_idx",
+          "columns": [
+            "boq_truck_type_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_po_boq_activities_slabs": {
+      "name": "porteight_po_boq_activities_slabs",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "activity_id": {
+          "autoincrement": false,
+          "name": "activity_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slab_min_value": {
+          "autoincrement": false,
+          "name": "slab_min_value",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slab_max_value": {
+          "autoincrement": false,
+          "name": "slab_max_value",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "boq_rate": {
+          "autoincrement": false,
+          "name": "boq_rate",
+          "type": "double(10,2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_po_boq_activities_slabs_id": {
+          "name": "porteight_po_boq_activities_slabs_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "activity_id_idx": {
+          "name": "activity_id_idx",
+          "columns": [
+            "activity_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_po_boq_truck_types": {
+      "name": "porteight_po_boq_truck_types",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "truck_type_id": {
+          "autoincrement": false,
+          "name": "truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_po_boq_truck_types_id": {
+          "name": "porteight_po_boq_truck_types_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_po_materials": {
+      "name": "porteight_po_materials",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "po_id": {
+          "autoincrement": false,
+          "name": "po_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "material_id": {
+          "autoincrement": false,
+          "name": "material_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity": {
+          "autoincrement": false,
+          "name": "quantity",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "uom": {
+          "autoincrement": false,
+          "name": "uom",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rate": {
+          "autoincrement": false,
+          "name": "rate",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gst_percentage": {
+          "autoincrement": false,
+          "name": "gst_percentage",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_po_materials_id": {
+          "name": "porteight_po_materials_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "material_id_idx": {
+          "name": "material_id_idx",
+          "columns": [
+            "material_id"
+          ],
+          "isUnique": false
+        },
+        "po_id_idx": {
+          "name": "po_id_idx",
+          "columns": [
+            "po_id"
+          ],
+          "isUnique": false
+        },
+        "uom_idx": {
+          "name": "uom_idx",
+          "columns": [
+            "uom"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "porteight_po_materials_po_id_material_id_unique": {
+          "name": "porteight_po_materials_po_id_material_id_unique",
+          "columns": [
+            "po_id",
+            "material_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_po_truck_type_rates": {
+      "name": "porteight_po_truck_type_rates",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "po_truck_type_id": {
+          "autoincrement": false,
+          "name": "po_truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rate": {
+          "autoincrement": false,
+          "name": "rate",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gst_percentage": {
+          "autoincrement": false,
+          "name": "gst_percentage",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_po_truck_type_rates_id": {
+          "name": "porteight_po_truck_type_rates_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "po_truck_type_id_idx": {
+          "name": "po_truck_type_id_idx",
+          "columns": [
+            "po_truck_type_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_po_truck_types": {
+      "name": "porteight_po_truck_types",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "po_id": {
+          "autoincrement": false,
+          "name": "po_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "truck_type_id": {
+          "autoincrement": false,
+          "name": "truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_po_truck_types_id": {
+          "name": "porteight_po_truck_types_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "po_id_idx": {
+          "name": "po_id_idx",
+          "columns": [
+            "po_id"
+          ],
+          "isUnique": false
+        },
+        "truck_type_id_idx": {
+          "name": "truck_type_id_idx",
+          "columns": [
+            "truck_type_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "porteight_po_truck_types_po_id_truck_type_id_unique": {
+          "name": "porteight_po_truck_types_po_id_truck_type_id_unique",
+          "columns": [
+            "po_id",
+            "truck_type_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_self_po_external_user": {
+      "name": "porteight_self_po_external_user",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "org_name": {
+          "autoincrement": false,
+          "name": "org_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mobile": {
+          "autoincrement": false,
+          "name": "mobile",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "autoincrement": false,
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_self_po_external_user_id": {
+          "name": "porteight_self_po_external_user_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_session": {
+      "name": "porteight_session",
+      "columns": {
+        "session_token": {
+          "autoincrement": false,
+          "name": "session_token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "autoincrement": false,
+          "name": "user_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires": {
+          "autoincrement": false,
+          "name": "expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_session_session_token": {
+          "name": "porteight_session_session_token",
+          "columns": [
+            "session_token"
+          ]
+        }
+      },
+      "indexes": {
+        "user_id_idx": {
+          "name": "user_id_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_sites": {
+      "name": "porteight_sites",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organization_id": {
+          "autoincrement": false,
+          "name": "organization_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address_id": {
+          "autoincrement": false,
+          "name": "address_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gstin": {
+          "autoincrement": false,
+          "name": "gstin",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_sites_id": {
+          "name": "porteight_sites_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "address_id_idx": {
+          "name": "address_id_idx",
+          "columns": [
+            "address_id"
+          ],
+          "isUnique": false
+        },
+        "gstin_idx": {
+          "name": "gstin_idx",
+          "columns": [
+            "gstin"
+          ],
+          "isUnique": false
+        },
+        "name_idx": {
+          "name": "name_idx",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        },
+        "organization_id_idx": {
+          "name": "organization_id_idx",
+          "columns": [
+            "organization_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_sites_po": {
+      "name": "porteight_sites_po",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "site_id": {
+          "autoincrement": false,
+          "name": "site_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "po_id": {
+          "autoincrement": false,
+          "name": "po_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_sites_po_id": {
+          "name": "porteight_sites_po_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "po_id_idx": {
+          "name": "po_id_idx",
+          "columns": [
+            "po_id"
+          ],
+          "isUnique": false
+        },
+        "site_id_idx": {
+          "name": "site_id_idx",
+          "columns": [
+            "site_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_sites_truck": {
+      "name": "porteight_sites_truck",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "site_id": {
+          "autoincrement": false,
+          "name": "site_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "truck_id": {
+          "autoincrement": false,
+          "name": "truck_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_sites_truck_id": {
+          "name": "porteight_sites_truck_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "site_id_idx": {
+          "name": "site_id_idx",
+          "columns": [
+            "site_id"
+          ],
+          "isUnique": false
+        },
+        "truck_id_idx": {
+          "name": "truck_id_idx",
+          "columns": [
+            "truck_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_subscription": {
+      "name": "porteight_subscription",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "billingId": {
+          "autoincrement": false,
+          "name": "billingId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organizationId": {
+          "autoincrement": false,
+          "name": "organizationId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "autoincrement": false,
+          "name": "status",
+          "type": "enum('active','inactive')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "startDate": {
+          "autoincrement": false,
+          "name": "startDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "endDate": {
+          "autoincrement": false,
+          "name": "endDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_subscription_id": {
+          "name": "porteight_subscription_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "billing_id_idx": {
+          "name": "billing_id_idx",
+          "columns": [
+            "billingId"
+          ],
+          "isUnique": false
+        },
+        "organization_id_idx": {
+          "name": "organization_id_idx",
+          "columns": [
+            "organizationId"
+          ],
+          "isUnique": false
+        },
+        "status_idx": {
+          "name": "status_idx",
+          "columns": [
+            "status"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_trip_materials": {
+      "name": "porteight_trip_materials",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trip_id": {
+          "autoincrement": false,
+          "name": "trip_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "material_id": {
+          "autoincrement": false,
+          "name": "material_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity_scheduled": {
+          "autoincrement": false,
+          "name": "quantity_scheduled",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quantity_delivered": {
+          "autoincrement": false,
+          "name": "quantity_delivered",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_trip_materials_id": {
+          "name": "porteight_trip_materials_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "material_id_idx": {
+          "name": "material_id_idx",
+          "columns": [
+            "material_id"
+          ],
+          "isUnique": false
+        },
+        "trip_id_idx": {
+          "name": "trip_id_idx",
+          "columns": [
+            "trip_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_trips": {
+      "name": "porteight_trips",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trip_no": {
+          "autoincrement": false,
+          "name": "trip_no",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "po_id": {
+          "autoincrement": false,
+          "name": "po_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pickup_address_id": {
+          "autoincrement": false,
+          "name": "pickup_address_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "drop_address_id": {
+          "autoincrement": false,
+          "name": "drop_address_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lead": {
+          "autoincrement": false,
+          "name": "lead",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chainage": {
+          "autoincrement": false,
+          "name": "chainage",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scheduled_date": {
+          "autoincrement": false,
+          "name": "scheduled_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end_trip_date": {
+          "autoincrement": false,
+          "name": "end_trip_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "supervisor": {
+          "autoincrement": false,
+          "name": "supervisor",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "default": "'scheduled'",
+          "autoincrement": false,
+          "name": "status",
+          "type": "enum('scheduled','started','stopped','completed')",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "truck_id": {
+          "autoincrement": false,
+          "name": "truck_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "driver_id": {
+          "autoincrement": false,
+          "name": "driver_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pickup_contact_id": {
+          "autoincrement": false,
+          "name": "pickup_contact_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "drop_contact_id": {
+          "autoincrement": false,
+          "name": "drop_contact_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "autoincrement": false,
+          "name": "description",
+          "type": "varchar(1024)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "challan_no": {
+          "autoincrement": false,
+          "name": "challan_no",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "diesel_amount": {
+          "autoincrement": false,
+          "name": "diesel_amount",
+          "type": "double(10,2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "diesel_quantity": {
+          "autoincrement": false,
+          "name": "diesel_quantity",
+          "type": "double(10,2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "weighbridge_slip_no": {
+          "autoincrement": false,
+          "name": "weighbridge_slip_no",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "unloading_client": {
+          "autoincrement": false,
+          "name": "unloading_client",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "truck_type_id": {
+          "autoincrement": false,
+          "name": "truck_type_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "diesel_date": {
+          "autoincrement": false,
+          "name": "diesel_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pump_name": {
+          "autoincrement": false,
+          "name": "pump_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_trips_id": {
+          "name": "porteight_trips_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "created_at_idx": {
+          "name": "created_at_idx",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        },
+        "driver_id_idx": {
+          "name": "driver_id_idx",
+          "columns": [
+            "driver_id"
+          ],
+          "isUnique": false
+        },
+        "drop_address_id_idx": {
+          "name": "drop_address_id_idx",
+          "columns": [
+            "drop_address_id"
+          ],
+          "isUnique": false
+        },
+        "drop_contact_id_idx": {
+          "name": "drop_contact_id_idx",
+          "columns": [
+            "drop_contact_id"
+          ],
+          "isUnique": false
+        },
+        "pickup_address_id_idx": {
+          "name": "pickup_address_id_idx",
+          "columns": [
+            "pickup_address_id"
+          ],
+          "isUnique": false
+        },
+        "pickup_contact_id_idx": {
+          "name": "pickup_contact_id_idx",
+          "columns": [
+            "pickup_contact_id"
+          ],
+          "isUnique": false
+        },
+        "po_id_idx": {
+          "name": "po_id_idx",
+          "columns": [
+            "po_id"
+          ],
+          "isUnique": false
+        },
+        "po_id_status_idx": {
+          "name": "po_id_status_idx",
+          "columns": [
+            "po_id",
+            "status"
+          ],
+          "isUnique": false
+        },
+        "scheduled_date_idx": {
+          "name": "scheduled_date_idx",
+          "columns": [
+            "scheduled_date"
+          ],
+          "isUnique": false
+        },
+        "status_idx": {
+          "name": "status_idx",
+          "columns": [
+            "status"
+          ],
+          "isUnique": false
+        },
+        "trip_no_idx": {
+          "name": "trip_no_idx",
+          "columns": [
+            "trip_no"
+          ],
+          "isUnique": false
+        },
+        "truck_id_idx": {
+          "name": "truck_id_idx",
+          "columns": [
+            "truck_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_trips_attachments": {
+      "name": "porteight_trips_attachments",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trip_id": {
+          "autoincrement": false,
+          "name": "trip_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "attachment_id": {
+          "autoincrement": false,
+          "name": "attachment_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_trips_attachments_id": {
+          "name": "porteight_trips_attachments_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "attachment_id_idx": {
+          "name": "attachment_id_idx",
+          "columns": [
+            "attachment_id"
+          ],
+          "isUnique": false
+        },
+        "trip_id_idx": {
+          "name": "trip_id_idx",
+          "columns": [
+            "trip_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_truck_types": {
+      "name": "porteight_truck_types",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_truck_types_id": {
+          "name": "porteight_truck_types_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_trucks": {
+      "name": "porteight_trucks",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "truck_no": {
+          "autoincrement": false,
+          "name": "truck_no",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organization_id": {
+          "autoincrement": false,
+          "name": "organization_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "autoincrement": false,
+          "name": "type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gps_service": {
+          "autoincrement": false,
+          "name": "gps_service",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "chassis_number": {
+          "autoincrement": false,
+          "name": "chassis_number",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fitness_upto": {
+          "autoincrement": false,
+          "name": "fitness_upto",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "insurance_validity": {
+          "autoincrement": false,
+          "name": "insurance_validity",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "manufacturer": {
+          "autoincrement": false,
+          "name": "manufacturer",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "permit_type": {
+          "autoincrement": false,
+          "name": "permit_type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "permit_issue_date": {
+          "autoincrement": false,
+          "name": "permit_issue_date",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "permitValidity": {
+          "autoincrement": false,
+          "name": "permitValidity",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "puc_validity": {
+          "autoincrement": false,
+          "name": "puc_validity",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "default": "'idle'",
+          "autoincrement": false,
+          "name": "status",
+          "type": "enum('running','stopped','idle')",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isDeleted": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "isDeleted",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fastag_bank_id": {
+          "autoincrement": false,
+          "name": "fastag_bank_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "truck_owner": {
+          "autoincrement": false,
+          "name": "truck_owner",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "truck_owner_contact": {
+          "autoincrement": false,
+          "name": "truck_owner_contact",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customer_name": {
+          "autoincrement": false,
+          "name": "customer_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_trucks_id": {
+          "name": "porteight_trucks_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "fastag_bank_idx": {
+          "name": "fastag_bank_idx",
+          "columns": [
+            "fastag_bank_id"
+          ],
+          "isUnique": false
+        },
+        "is_deleted_idx": {
+          "name": "is_deleted_idx",
+          "columns": [
+            "isDeleted"
+          ],
+          "isUnique": false
+        },
+        "organization_idx": {
+          "name": "organization_idx",
+          "columns": [
+            "organization_id"
+          ],
+          "isUnique": false
+        },
+        "status_idx": {
+          "name": "status_idx",
+          "columns": [
+            "status"
+          ],
+          "isUnique": false
+        },
+        "truck_no_idx": {
+          "name": "truck_no_idx",
+          "columns": [
+            "truck_no"
+          ],
+          "isUnique": false
+        },
+        "type_idx": {
+          "name": "type_idx",
+          "columns": [
+            "type"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "truck_unique": {
+          "name": "truck_unique",
+          "columns": [
+            "truck_no",
+            "organization_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_uom": {
+      "name": "porteight_uom",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "material_id": {
+          "autoincrement": false,
+          "name": "material_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_uom_id": {
+          "name": "porteight_uom_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "material_id_idx": {
+          "name": "material_id_idx",
+          "columns": [
+            "material_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "porteight_user": {
+      "name": "porteight_user",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "autoincrement": false,
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mobile_no": {
+          "autoincrement": false,
+          "name": "mobile_no",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "verified": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "verified",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_deleted": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "is_deleted",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "autoincrement": false,
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "autoincrement": false,
+          "name": "role",
+          "type": "enum('supplier','transporter')",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "onboarding_completed": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "onboarding_completed",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "background_verified": {
+          "default": 1,
+          "autoincrement": false,
+          "name": "background_verified",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "account_type": {
+          "autoincrement": false,
+          "name": "account_type",
+          "type": "enum('personal','business')",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image": {
+          "autoincrement": false,
+          "name": "image",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "organization_id": {
+          "autoincrement": false,
+          "name": "organization_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tb_token": {
+          "autoincrement": false,
+          "name": "tb_token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "default": "(now())",
+          "autoincrement": false,
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "show_fastag": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "show_fastag",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_user_id": {
+          "name": "porteight_user_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "email_idx": {
+          "name": "email_idx",
+          "columns": [
+            "email"
+          ],
+          "isUnique": false
+        },
+        "is_deleted_idx": {
+          "name": "is_deleted_idx",
+          "columns": [
+            "is_deleted"
+          ],
+          "isUnique": false
+        },
+        "mobile_no_idx": {
+          "name": "mobile_no_idx",
+          "columns": [
+            "mobile_no"
+          ],
+          "isUnique": false
+        },
+        "onboarding_status_idx": {
+          "name": "onboarding_status_idx",
+          "columns": [
+            "is_deleted",
+            "onboarding_completed",
+            "background_verified"
+          ],
+          "isUnique": false
+        },
+        "organization_id_idx": {
+          "name": "organization_id_idx",
+          "columns": [
+            "organization_id"
+          ],
+          "isUnique": false
+        },
+        "role_idx": {
+          "name": "role_idx",
+          "columns": [
+            "role"
+          ],
+          "isUnique": false
+        },
+        "show_fastag_idx": {
+          "name": "show_fastag_idx",
+          "columns": [
+            "show_fastag"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "porteight_user_email_unique": {
+          "name": "porteight_user_email_unique",
+          "columns": [
+            "email"
+          ]
+        },
+        "porteight_user_mobile_no_unique": {
+          "name": "porteight_user_mobile_no_unique",
+          "columns": [
+            "mobile_no"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "porteight_verificationToken": {
+      "name": "porteight_verificationToken",
+      "columns": {
+        "identifier": {
+          "autoincrement": false,
+          "name": "identifier",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token": {
+          "autoincrement": false,
+          "name": "token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires": {
+          "autoincrement": false,
+          "name": "expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "porteight_verificationToken_identifier_token": {
+          "name": "porteight_verificationToken_identifier_token",
+          "columns": [
+            "identifier",
+            "token"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    }
+  },
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {
+      "porteight_addresses": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_attachments": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bid_boq": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bid_boq_activities": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bid_boq_activities_slabs": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bid_boq_truck_types": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bids": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bids_addresses": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bids_attachments": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bids_materials": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bids_materials_prices": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bids_specifications": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bids_specifications_attachments": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bids_specifications_materials": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bids_specifications_truck_types": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bids_truck_types": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_bids_truck_types_rate": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_billing_history": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_boq": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_boq_activities": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_boq_activities_slabs": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_boq_truck_types": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_contacts": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_drivers": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_fastag_bank": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_fastag_transactions": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_invoice_trips": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_invoices": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_loa": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_material_attachments": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_materials": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_msme_details": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_org_materials": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_org_service_locations": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_org_users": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_org_users_site": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_organization": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_organization_attachments": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_payments": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_payments_invoices": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_po": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_po_addresses": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_po_attachments": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_po_boq": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_po_boq_activities": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_po_boq_activities_slabs": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_po_boq_truck_types": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_po_materials": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_po_truck_type_rates": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_po_truck_types": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_self_po_external_user": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_sites": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_sites_po": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_sites_truck": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_subscription": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_trip_materials": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_trips": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_trips_attachments": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_truck_types": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_trucks": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_uom": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "porteight_user": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at": {
+            "isDefaultAnExpression": true
+          }
+        }
+      }
+    },
+    "indexes": {}
+  }
+}

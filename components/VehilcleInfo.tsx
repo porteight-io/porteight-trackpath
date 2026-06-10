@@ -1,0 +1,128 @@
+import {
+  BarChart3,
+  LocateFixed,
+  Share2,
+  TrendingUp,
+  LayoutDashboard,
+  MapPin,
+} from "lucide-react";
+import Button from "./UI/Button";
+import { useTracking } from "@/hooks/useTracking";
+
+export default function VehicleInfo() {
+  const { truckData } = useTracking();
+
+  return (
+    <section className="bg-[#4377db] lg:px-18 md:px-10 px-6 py-6 text-white">
+      <div className="flex flex-col gap-5">
+        <div className="flex flex-wrap items-center gap-3 text-sm">
+          <h2 className="text-lg font-medium">{truckData.truck_no}</h2>
+          <div
+            className={`${
+              truckData?.eventStatus === "ON" ||
+              truckData?.eventStatus === "OFF"
+                ? "flex items-center gap-2"
+                : "hidden"
+            }`}
+          >
+            <span className="rounded bg-red-600 px-2 text-xs font-bold uppercase">
+              {truckData.eventStatus}
+            </span>
+
+            <span className="font-medium text-xs uppercase text-gray-100">
+              {truckData.eventStatus === "ON" ? "Running" : "Stopped"}
+            </span>
+          </div>
+
+          <span>|</span>
+
+          <span className="text-xs flex items-center gap-1">
+            <span className="font-semibold">Model</span>{" "}
+            <span className="text-gray-100">NA5525N/34 TT CC</span>
+          </span>
+
+          <span>|</span>
+
+          <span className="text-xs flex items-center gap-1">
+            <span className="font-semibold">Reporting Time</span>
+            <span className="text-gray-100">27-01-2026 06:56:44 PM</span>
+          </span>
+
+          <span>|</span>
+
+          <span className="text-xs flex items-center gap-1">
+            <span className="font-semibold">Current Location</span>
+            <span className="text-gray-100">
+              24VX+9G Deori, Chhattisgarh, India
+            </span>
+          </span>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-5">
+          <div className="flex flex-wrap items-center gap-4">
+            <Button
+              variant="secondary"
+              text="Trace"
+              frontIcon={<LocateFixed size={18} />}
+              size="sm"
+            />
+
+            <Button
+              variant="secondary"
+              text="Trend"
+              frontIcon={<TrendingUp size={18} />}
+              size="sm"
+            />
+
+            <Button
+              variant="secondary"
+              text="KPI Compare"
+              frontIcon={<BarChart3 size={18} />}
+              size="sm"
+            />
+
+            <Button
+              variant="secondary"
+              text="Vehicle Dashboard"
+              frontIcon={<LayoutDashboard size={18} />}
+              size="sm"
+            />
+
+            <Button
+              variant="secondary"
+              text="Near by Places"
+              frontIcon={<MapPin size={18} />}
+              size="sm"
+            />
+          </div>
+
+          <div className="flex items-center gap-4">
+            <Button
+              variant="primary"
+              text="Download"
+              backIcon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-4 h-4"
+                  preserveAspectRatio="xMidYMid meet"
+                >
+                  <path d="M3 19H21V21H3V19ZM13 9H20L12 17L4 9H11V1H13V9Z"></path>
+                </svg>
+              }
+              size="sm"
+            />
+
+            <Button
+              variant="primary"
+              text="Share"
+              backIcon={<Share2 size={16} fill="#000000" />}
+              size="sm"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
