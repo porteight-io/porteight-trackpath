@@ -14,6 +14,8 @@ type TrackPoint = {
 type TruckProp = {
   truck_no: string;
   eventStatus: string;
+  lat?: number;
+  lng?: number;
   // model: string;
   // reporting_time: string;
   // current_location: string;
@@ -39,6 +41,8 @@ export function TrackingProvider({
   const [truckData, setTruckData] = useState<TruckProp>({
     truck_no: "",
     eventStatus: "",
+    lat: undefined,
+    lng: undefined,
     // model: "",
     // reporting_time: "",
     // current_location: ""

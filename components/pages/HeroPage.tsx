@@ -1,5 +1,3 @@
-// components/pages/HeroPage.tsx
-
 "use client";
 
 import FilterBar from "../FilterTabs";

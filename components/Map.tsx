@@ -41,9 +41,19 @@ function MapContent() {
   const geometryLibrary = useMapsLibrary("geometry");
 
   const distance = useMemo(() => {
-    if (!coreLibrary || !geometryLibrary || trackPath.length < 2) return "0.00";
+    if (!coreLibrary || !geometryLibrary || trackPath.length < 2) return 0.00;
     return calculateDistance(trackPath, coreLibrary, geometryLibrary);
   }, [trackPath, coreLibrary, geometryLibrary]);
+
+  
+  const fuelConsumed = useMemo(() => {
+    if (!coreLibrary || !geometryLibrary || trackPath.length < 2) 
+      return 0.00;
+    // const distance: any = calculateDistance(trackPath, coreLibrary, geometryLibrary);
+    const fuelEfficiency = 2.41;
+    return (Number(distance) / fuelEfficiency).toFixed(2);
+  }, [trackPath, coreLibrary, geometryLibrary, distance]);
+
 
   return (
     <>
@@ -80,23 +90,13 @@ function MapContent() {
           <span>Distance</span> <span>{distance} km</span>
         </div>
         <div className="flex justify-between">
-          <span>Fuel Consumed</span> <span>95.0 ltr</span>
+          <span>Fuel Consumed</span> <span>{fuelConsumed} ltr</span>
         </div>
         <div className="flex justify-between">
           <span>kmpl</span> <span>2.41</span>
         </div>
         <div className="flex justify-between">
-          <span>DEF Consumed</span> <span>5.5 ltr</span>
-        </div>
-        <div className="pt-2 text-xs text-slate-500">Duration(hh:mm:ss)</div>
-        <div className="flex justify-between">
-          <span>Running Time</span> <span>06:47:00</span>
-        </div>
-        <div className="flex justify-between">
-          <span>Idling Time</span> <span>00:23:00</span>
-        </div>
-        <div className="flex justify-between">
-          <span>Halt Time</span> <span>07:08:00</span>
+          <span>DEF Consumed</span> <span>1.18 ltr</span>
         </div>
       </div>
     </>

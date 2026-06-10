@@ -47,7 +47,7 @@ export function toISTDate(date: Date) {
 
 export function segmentTrackingData(trackingHistoryData: any) {
   const segments = [];
-  let currentSegment: any[] = [];
+  const currentSegment: any[] = [];
 
   for (const data of trackingHistoryData.data) {
     currentSegment.push(data);
@@ -72,7 +72,6 @@ export const fetchTrackingHistory = async (
         `${simulatorUrl}/api/tracking-history?truckId=${truckId}&dateFrom=${toISTDate(range.from)}&dateTo=${toISTDate(range.to)}`,
       );
       const simulatorData = simulatorResponse.data;
-      console.log("Simulator tracking history data:", simulatorData);
       return {
         data: segmentTrackingData(simulatorData),
         length: simulatorData.data.length,

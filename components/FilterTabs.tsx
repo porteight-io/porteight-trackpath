@@ -3,7 +3,7 @@ import {
   getTodayString,
   validateFilters,
 } from "@/helpers/validate";
-import { FilterPayload, PlaybackPayload } from "@/interfaces/interface";
+import { FilterPayload } from "@/interfaces/interface";
 import { getRegNo } from "@/services/regno.service";
 import { Check, ChevronDown, Play, RotateCw } from "lucide-react";
 import { useCallback, useEffect, useState, useRef, useMemo } from "react";
@@ -42,7 +42,7 @@ export default function FilterBar() {
 
         const first = numbers?.[0];
         setTruckData({
-          truck_no: first?.registrationNo || "",
+          truck_no: "Truck no.",
           eventStatus: "OFF",
           // model: "",
           // reporting_time: "",
@@ -121,7 +121,6 @@ export default function FilterBar() {
       });
 
       const flattenedData = response?.data?.flat() || [];
-      console.log("Flattened tracking data:", flattenedData);
 
       const coordinates = flattenedData.map((item: any) => ({
         lat: Number(item.latitude),
@@ -136,6 +135,8 @@ export default function FilterBar() {
         truck_no: regNumber,
         eventStatus:
           latestEvent?.eventData_ignitionStatus,
+        lat: Number(latestEvent.latitude),
+        lng: Number(latestEvent.longitude),
         // model: "",
         // reporting_time: "",
         // current_location: ""
@@ -162,7 +163,6 @@ export default function FilterBar() {
     setSpeed("2x");
     setError(null);
     setIsPlaying(false);
-    handleSubmit();
   };
 
   const handlePlay = async () => {
@@ -181,7 +181,6 @@ export default function FilterBar() {
     // if (isPlaying) {
     //   // Stop playback
     //   setIsPlaying(false);
-    //   console.log("Playback stopped.");
     //   return;
     // }
 
@@ -202,7 +201,6 @@ export default function FilterBar() {
     //   }
 
     //   const data = await response.data;
-    //   console.log("Playback data:", data);
     //   // TODO: hand off `data` + `speed` to your map player
     // } catch (err) {
     //   setError(
@@ -246,7 +244,7 @@ export default function FilterBar() {
       )}
 
       <div className="flex flex-wrap items-end justify-between gap-5">
-        <div className="flex flex-wrap items-end gap-8">
+        <div className="flex flex-wrap items-end gap-2">
           {/* Reg Number */}
           <div className="flex flex-col gap-2">
             <div className="relative">

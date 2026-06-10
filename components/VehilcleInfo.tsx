@@ -8,9 +8,27 @@ import {
 } from "lucide-react";
 import Button from "./UI/Button";
 import { useTracking } from "@/hooks/useTracking";
+import NodeGeocoder from "node-geocoder";
+import { useEffect, useState } from "react";
+import { getLocationName } from "@/helpers/getLocation";
 
 export default function VehicleInfo() {
   const { truckData } = useTracking();
+  const [location, setLocation] = useState<string>("");
+  const lat = truckData?.lat;
+  const lon = truckData?.lng;
+  console.log("VehicleInfo LatLng:", lat, lon);
+
+  useEffect(() => {
+    if (lat && lon) {
+      getLocationName(lat, lon).then((location) => {
+        console.log("Resolved Location:", location);
+        setLocation(location);
+      }).catch((error) => {
+        console.error("Error fetching location:", error);
+      });
+    }
+  }, [lat, lon])
 
   return (
     <section className="bg-[#4377db] lg:px-18 md:px-10 px-6 py-6 text-white">
@@ -21,7 +39,7 @@ export default function VehicleInfo() {
             className={`${
               truckData?.eventStatus === "ON" ||
               truckData?.eventStatus === "OFF"
-                ? "flex items-center gap-2"
+                ? "block"
                 : "hidden"
             }`}
           >
@@ -53,7 +71,7 @@ export default function VehicleInfo() {
           <span className="text-xs flex items-center gap-1">
             <span className="font-semibold">Current Location</span>
             <span className="text-gray-100">
-              24VX+9G Deori, Chhattisgarh, India
+              {location || "Location not available"}
             </span>
           </span>
         </div>
