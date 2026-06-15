@@ -3,7 +3,7 @@ import {
   getTodayString,
   validateFilters,
 } from "@/helpers/validate";
-import { FilterPayload } from "@/interfaces/interface";
+import { FilterPayload, VehicleNumber } from "@/interfaces/interface";
 import { getRegNo } from "@/services/regno.service";
 import { Check, ChevronDown, Play, RotateCw } from "lucide-react";
 import { useCallback, useEffect, useState, useRef, useMemo } from "react";
@@ -13,9 +13,7 @@ import { List } from "react-window";
 
 export default function FilterBar() {
   const [regNumber, setRegNumber] = useState("Truck No.");
-  const [vehicleNumbers, setVehicleNumbers] = useState<
-    { registrationNo: string }[]
-  >([]);
+  const [vehicleNumbers, setVehicleNumbers] = useState<VehicleNumber[]>([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -41,19 +39,17 @@ export default function FilterBar() {
         setVehicleNumbers(numbers);
 
         const first = numbers?.[0];
-        setTruckData({
-          truck_no: "Truck no.",
-          eventStatus: "OFF",
-          // model: "",
-          // reporting_time: "",
-          // current_location: ""
-        });
         if (first) {
           setRegNumber(first.registrationNo);
           setStartDate(getTodayString());
           setEndDate(getTodayString());
           setStartTime("00:00");
           setEndTime("23:59");
+          setTruckData({
+            truck_no: first.registrationNo,
+            eventStatus: "OFF",
+            model: first.model || "",
+          });
         }
       } catch (err) {
         console.error("Failed to load registration numbers:", err);
@@ -61,7 +57,7 @@ export default function FilterBar() {
     };
 
     fetchAndSeed();
-  }, []);
+  }, [setTruckData]);
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -99,6 +95,12 @@ export default function FilterBar() {
     );
   }, [vehicleNumbers, search]);
 
+  const selectedVehicle = useMemo(
+    () =>
+      vehicleNumbers.find((item) => item.registrationNo === regNumber) ?? null,
+    [vehicleNumbers, regNumber],
+  );
+
   const handleSubmit = async () => {
     const payload = buildPayload();
     const validationError = validateFilters(payload);
@@ -133,13 +135,10 @@ export default function FilterBar() {
 
       setTruckData({
         truck_no: regNumber,
-        eventStatus:
-          latestEvent?.eventData_ignitionStatus,
-        lat: Number(latestEvent.latitude),
-        lng: Number(latestEvent.longitude),
-        // model: "",
-        // reporting_time: "",
-        // current_location: ""
+        eventStatus: latestEvent?.eventData_ignitionStatus,
+        lat: Number(latestEvent?.latitude),
+        lng: Number(latestEvent?.longitude),
+        model: selectedVehicle?.model || "",
       });
     } catch (err) {
       console.error(err);
@@ -166,49 +165,6 @@ export default function FilterBar() {
   };
 
   const handlePlay = async () => {
-    // const payload = buildPayload();
-    // const validationError = validateFilters(payload);
-
-    // if (validationError) {
-    //   setError(validationError);
-    //   return;
-    // }
-
-    // setError(null);
-
-    // const playbackPayload: PlaybackPayload = { ...payload, speed };
-
-    // if (isPlaying) {
-    //   // Stop playback
-    //   setIsPlaying(false);
-    //   return;
-    // }
-
-    // setIsPlaying(true);
-
-    // try {
-    //   const response = await axios.post(
-    //     "/api/vehicle/playback",
-    //     playbackPayload,
-    //     {
-    //       headers: { "Content-Type": "application/json" },
-    //     },
-    //   );
-
-    //   if (response.status !== 200) {
-    //     const { message } = await response.data.catch(() => ({}));
-    //     throw new Error(message ?? `Server error: ${response.status}`);
-    //   }
-
-    //   const data = await response.data;
-    //   // TODO: hand off `data` + `speed` to your map player
-    // } catch (err) {
-    //   setError(
-    //     err instanceof Error ? err.message : "Failed to start playback.",
-    //   );
-    //   setIsPlaying(false);
-    // }
-
     alert("Play!");
   };
 
@@ -228,6 +184,11 @@ export default function FilterBar() {
         onClick={() => {
           setRegNumber(item.registrationNo);
           setSearch(item.registrationNo);
+          setTruckData((prev) => ({
+            ...prev,
+            truck_no: item.registrationNo,
+            model: item.model || "",
+          }));
           setIsDropdownOpen(false);
         }}
       >
@@ -238,21 +199,16 @@ export default function FilterBar() {
 
   return (
     <section className="border-b border-slate-200 bg-white lg:px-18 md:px-10 px-6 py-3">
-      {/* Validation error banner */}
-      {error && (
-        <p className="mb-2 text-xs font-medium text-red-500">{error}</p>
-      )}
+      {error && <p className="mb-2 text-xs font-medium text-red-500">{error}</p>}
 
       <div className="flex flex-wrap items-end justify-between gap-5">
         <div className="flex flex-wrap items-end gap-2">
-          {/* Reg Number */}
           <div className="flex flex-col gap-2">
             <div className="relative">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col">
                 <label className="text-xs text-slate-500">Reg Number</label>
 
                 <div ref={dropdownRef} className="relative w-64">
-                  {/* Search Input */}
                   <input
                     type="text"
                     value={search || regNumber}
@@ -263,7 +219,7 @@ export default function FilterBar() {
                       setRegNumber(e.target.value);
                       setIsDropdownOpen(true);
                     }}
-                    className="h-11 w-full border-b border-slate-300 bg-transparent pr-8 font-medium text-slate-700 outline-none"
+                    className="h-11 w-full border-b border-slate-300 bg-transparent pr-8 font-medium text-slate-500 outline-none"
                   />
 
                   <ChevronDown
@@ -271,7 +227,6 @@ export default function FilterBar() {
                     className="pointer-events-none absolute right-0 top-3 text-slate-500"
                   />
 
-                  {/* Dropdown */}
                   {isDropdownOpen && (
                     <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-md border bg-white shadow-lg">
                       {filteredVehicles.length > 0 ? (
@@ -298,56 +253,52 @@ export default function FilterBar() {
             </div>
           </div>
 
-          {/* Start Date */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             <label className="text-xs text-slate-500">Start Date</label>
             <input
               type="date"
               value={startDate}
               max={endDate || undefined}
               onChange={(e) => setStartDate(e.target.value)}
-              className="h-11 border-b border-slate-300 bg-transparent pr-8 font-medium text-slate-700 outline-none"
+              className="h-11 border-b border-slate-300 bg-transparent pr-8 font-medium text-slate-500 outline-none"
             />
           </div>
 
-          {/* End Date */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             <label className="text-xs text-slate-500">End Date</label>
             <input
               type="date"
               value={endDate}
               min={startDate || undefined}
               onChange={(e) => setEndDate(e.target.value)}
-              className="h-11 border-b border-slate-300 bg-transparent pr-8 font-medium text-slate-700 outline-none"
+              className="h-11 border-b border-slate-300 bg-transparent pr-8 font-medium text-slate-500 outline-none"
             />
           </div>
 
-          {/* Start Time */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             <label className="text-xs text-slate-500">Start Time</label>
             <input
               type="time"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
-              className="h-11 border-b border-slate-300 bg-transparent font-medium text-slate-700 outline-none"
+              className="h-11 border-b border-slate-300 bg-transparent font-medium text-slate-500 outline-none"
             />
           </div>
 
-          {/* End Time */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             <label className="text-xs text-slate-500">End Time</label>
             <input
               type="time"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="h-11 border-b border-slate-300 bg-transparent font-medium text-slate-700 outline-none"
+              className="h-11 border-b border-slate-300 bg-transparent font-medium text-slate-500 outline-none"
             />
           </div>
 
           <Button
             variant="primary"
             text={isLoading ? "Loading..." : "Submit"}
-            backIcon={<Check size={16} />}
+            backIcon={<i className="fa fa-check" aria-hidden="true"></i>}
             size="sm"
             onClick={handleSubmit}
             disabled={isLoading}
@@ -363,9 +314,8 @@ export default function FilterBar() {
           />
         </div>
 
-        <div className="flex items-end gap-6">
-          {/* Speed */}
-          <div className="flex flex-col gap-2">
+        <div className="flex items-end gap-12">
+          <div className="flex flex-col">
             <label className="text-xs text-slate-500">Speed</label>
             <div className="relative">
               <select
@@ -385,7 +335,6 @@ export default function FilterBar() {
             </div>
           </div>
 
-          {/* Play / Stop */}
           <div className="relative">
             <span className="absolute -right-3 -top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
               New
@@ -403,3 +352,4 @@ export default function FilterBar() {
     </section>
   );
 }
+

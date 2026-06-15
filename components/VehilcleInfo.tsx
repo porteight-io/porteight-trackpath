@@ -5,6 +5,9 @@ import {
   TrendingUp,
   LayoutDashboard,
   MapPin,
+  Pin,
+  MapPinIcon,
+  Building2,
 } from "lucide-react";
 import Button from "./UI/Button";
 import { useTracking } from "@/hooks/useTracking";
@@ -21,18 +24,20 @@ export default function VehicleInfo() {
 
   useEffect(() => {
     if (lat && lon) {
-      getLocationName(lat, lon).then((location) => {
-        console.log("Resolved Location:", location);
-        setLocation(location);
-      }).catch((error) => {
-        console.error("Error fetching location:", error);
-      });
+      getLocationName(lat, lon)
+        .then((location) => {
+          console.log("Resolved Location:", location);
+          setLocation(location);
+        })
+        .catch((error) => {
+          console.error("Error fetching location:", error);
+        });
     }
-  }, [lat, lon])
+  }, [lat, lon]);
 
   return (
     <section className="bg-[#4377db] lg:px-18 md:px-10 px-6 py-6 text-white">
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-3 text-sm">
           <h2 className="text-lg font-medium">{truckData.truck_no}</h2>
           <div
@@ -56,7 +61,7 @@ export default function VehicleInfo() {
 
           <span className="text-xs flex items-center gap-1">
             <span className="font-semibold">Model</span>{" "}
-            <span className="text-gray-100">NA5525N/34 TT CC</span>
+            <span className="text-gray-100">{truckData.model}</span>
           </span>
 
           <span>|</span>
@@ -81,35 +86,41 @@ export default function VehicleInfo() {
             <Button
               variant="secondary"
               text="Trace"
-              frontIcon={<LocateFixed size={18} />}
+              frontIcon={
+                <i className="fa fa-map-marker" aria-hidden="true"></i>
+              }
               size="sm"
             />
 
             <Button
               variant="secondary"
               text="Trend"
-              frontIcon={<TrendingUp size={18} />}
+              frontIcon={
+                <i className="fa fa-line-chart" aria-hidden="true"></i>
+              }
               size="sm"
             />
 
             <Button
               variant="secondary"
               text="KPI Compare"
-              frontIcon={<BarChart3 size={18} />}
+              frontIcon={<i className="fa fa-bar-chart" aria-hidden="true"></i>}
               size="sm"
             />
 
             <Button
               variant="secondary"
               text="Vehicle Dashboard"
-              frontIcon={<LayoutDashboard size={18} />}
+              frontIcon={
+                <i className="fa fa-exclamation" aria-hidden="true"></i>
+              }
               size="sm"
             />
 
             <Button
               variant="secondary"
               text="Near by Places"
-              frontIcon={<MapPin size={18} />}
+              frontIcon={<Building2 size={16} />}
               size="sm"
             />
           </div>
@@ -119,15 +130,7 @@ export default function VehicleInfo() {
               variant="primary"
               text="Download"
               backIcon={
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-4 h-4"
-                  preserveAspectRatio="xMidYMid meet"
-                >
-                  <path d="M3 19H21V21H3V19ZM13 9H20L12 17L4 9H11V1H13V9Z"></path>
-                </svg>
+                <i className="fa fa-download" aria-hidden="true"></i>
               }
               size="sm"
             />

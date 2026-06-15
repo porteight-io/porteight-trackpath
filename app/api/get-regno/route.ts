@@ -6,7 +6,8 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
     try {
         const data = await db.selectDistinct({
-            registrationNo: porteight_trucks.truck_no
+            registrationNo: porteight_trucks.truck_no,
+            model: porteight_trucks.chassis_number
         })
         .from(porteight_trucks)
         .where(eq(porteight_trucks.organization_id, 154))

@@ -5,7 +5,7 @@ const Button = (props: ButtonProps) => {
     props.variant === "primary"
       ? "bg-amber-400 text-slate-950 hover:bg-amber-300 shadow-[0_10px_24px_rgba(245,158,11,0.25)]"
       : props.variant === "secondary"
-      ? "bg-white/10 text-white border border-white/20 hover:bg-white/15"
+      ? "bg-transparent border border-white/70 hover:bg-white/15"
       : "bg-white text-slate-900 hover:bg-slate-50 border border-slate-200 shadow-sm";
 
   const sizeVariant = {
@@ -26,7 +26,7 @@ const Button = (props: ButtonProps) => {
       <button
         onClick={handleSubmit}
         disabled={props.disabled}
-        className={`${btnVariant} ${sizeVariant} mt-2 inline-flex items-center justify-center gap-2 rounded-full font-bold transition-colors cursor-pointer`}
+        className={`${btnVariant} ${sizeVariant} mt-2 inline-flex items-center justify-center gap-2 rounded-full ${props.variant === "primary" && "font-bold"} ${props.variant === "secondary" && props.text === "Trace" && "bg-white text-black"} transition-colors cursor-pointer`}
       >
         {props.frontIcon} {props.text} {props.backIcon}
       </button>

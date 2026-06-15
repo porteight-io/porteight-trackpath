@@ -16,7 +16,7 @@ type TruckProp = {
   eventStatus: string;
   lat?: number;
   lng?: number;
-  // model: string;
+  model?: string;
   // reporting_time: string;
   // current_location: string;
 }
@@ -43,7 +43,7 @@ export function TrackingProvider({
     eventStatus: "",
     lat: undefined,
     lng: undefined,
-    // model: "",
+    model: "",
     // reporting_time: "",
     // current_location: ""
   });

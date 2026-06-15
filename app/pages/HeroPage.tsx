@@ -1,9 +1,9 @@
 "use client";
 
-import FilterBar from "../FilterTabs";
-import MapPanel from "../Map";
-import UpperNavbar from "../UpperNavbar";
-import VehicleInfo from "../VehilcleInfo";
+import FilterBar from "@/components/FilterTabs";
+import MapPanel from "@/components/Map";
+import UpperNavbar from "@/components/UpperNavbar";
+import VehicleInfo from "@/components/VehilcleInfo";
 
 export default function HeroPage() {
   return (

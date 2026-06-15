@@ -41,19 +41,16 @@ function MapContent() {
   const geometryLibrary = useMapsLibrary("geometry");
 
   const distance = useMemo(() => {
-    if (!coreLibrary || !geometryLibrary || trackPath.length < 2) return 0.00;
+    if (!coreLibrary || !geometryLibrary || trackPath.length < 2) return 0.0;
     return calculateDistance(trackPath, coreLibrary, geometryLibrary);
   }, [trackPath, coreLibrary, geometryLibrary]);
 
-  
   const fuelConsumed = useMemo(() => {
-    if (!coreLibrary || !geometryLibrary || trackPath.length < 2) 
-      return 0.00;
+    if (!coreLibrary || !geometryLibrary || trackPath.length < 2) return 0.0;
     // const distance: any = calculateDistance(trackPath, coreLibrary, geometryLibrary);
     const fuelEfficiency = 2.41;
     return (Number(distance) / fuelEfficiency).toFixed(2);
   }, [trackPath, coreLibrary, geometryLibrary, distance]);
-
 
   return (
     <>
@@ -86,19 +83,22 @@ function MapContent() {
 
       {/* Stats overlay — distance now computed inside APIProvider context */}
       <div className="absolute left-2 top-15 z-40 w-43 text-xs overflow-hidden bg-white px-4 py-3 shadow-lg space-y-1">
-        <div className="flex justify-between">
-          <span>Distance</span> <span>{distance} km</span>
-        </div>
-        <div className="flex justify-between">
-          <span>Fuel Consumed</span> <span>{fuelConsumed} ltr</span>
-        </div>
-        <div className="flex justify-between">
-          <span>kmpl</span> <span>2.41</span>
-        </div>
-        <div className="flex justify-between">
-          <span>DEF Consumed</span> <span>1.18 ltr</span>
-        </div>
-      </div>
+  {[
+    { label: "Distance", value: `${distance} km` },
+    { label: "Fuel Consumed", value: `${fuelConsumed} ltr` },
+    { label: "kmpl", value: "2.41" },
+    { label: "DEF Consumed", value: "1.18 ltr" },
+    { label: "Duration(hh:mm:ss)", value: "" },
+    { label: "Running Time", value: "06:47:00" },
+    { label: "Idling Time", value: "00:23:00" },
+    { label: "Halt Time", value: "07:08:00" },
+  ].map(({ label, value }) => (
+    <div key={label} className="grid grid-cols-[1fr_auto] items-center text-xs text-nowrap">
+      <span className={`pr-2 ${label !== "Duration(hh:mm:ss)" ? 'border-r-2 border-gray-300' : 'text-gray-500 text-center my-1'}`}>{label}</span>
+      <span className="pl-2 text-right">{value}</span>
+    </div>
+  ))}
+</div>
     </>
   );
 }

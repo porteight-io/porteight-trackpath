@@ -3,15 +3,15 @@ import Logo from "./Logo";
 
 export default function UpperNavbar() {
   return (
-    <header className="flex h-20 items-center justify-between border-b border-gray-300 bg-white lg:px-18 md:px-10 px-6 mb-[0.4px]">
+    <header className="flex h-17 items-center justify-between border-b border-gray-300 bg-white lg:px-18 md:px-10 px-6 mb-[0.4px]">
       {" "}
       <div className="flex items-center gap-10">
         <div className="flex items-center gap-3">
           <Logo />
         </div>
 
-        <nav className="hidden h-20 items-center gap-10 text-xs lg:flex">
-          <button className="flex items-center gap-2 text-[#0b66ff]">
+        <nav className="hidden h-17 items-center gap-6 text-xs lg:flex">
+          <button className="flex items-center gap-2 mr-8 text-[#0b66ff]">
             <svg
               viewBox="0 0 512 512"
               xmlns="http://www.w3.org/2000/svg"
@@ -31,23 +31,21 @@ export default function UpperNavbar() {
             </svg>
           </button>
 
-          <button className="font-semibold text-slate-700">MAP</button>
+          <button className="font-bold text-slate-700">MAP</button>
 
-          <button className="font-semibold text-slate-700">LIST</button>
+          <button className="font-bold text-slate-700">LIST</button>
 
-          <button className="flex h-20 items-center border-b-4 border-[#0b66ff] text-xs font-bold text-[#0b66ff]">
+          <button className="relative flex h-17 items-center px-4 text-xs font-bold text-[#0b66ff]">
             VEHICLE INFO
+            <span className="absolute bottom-0 left-0 h-1 w-full rounded-t-full bg-[#0b66ff]" />
           </button>
         </nav>
       </div>
-      <div className="flex items-center gap-16">
-        <Bell
-          size={18}
-          className="cursor-pointer text-slate-700"
-          fill="#000000"
-        />
+      <div className="flex items-center gap-20">
+        <i className="fa fa-bell" aria-hidden="true"></i>
 
-        <Menu size={20} className="cursor-pointer text-slate-700" />
+        {/* <Menu size={20} className="cursor-pointer text-slate-700" /> */}
+        <img src="./Ham.png" alt="iAlert" title="Menu"></img>
       </div>
     </header>
   );

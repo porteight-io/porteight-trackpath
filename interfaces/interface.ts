@@ -11,6 +11,11 @@ export interface ButtonProps {
   disabled?: boolean;
 }
 
+export interface VehicleNumber {
+  registrationNo: string;
+  model: string;
+}
+
 export interface InputProps {
   value: string;
   setValue: (value: string) => void;
