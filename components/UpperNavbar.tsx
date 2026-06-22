@@ -1,5 +1,6 @@
 import { Bell, Home, Menu } from "lucide-react";
 import Logo from "./Logo";
+import Image from "next/image";
 
 export default function UpperNavbar() {
   return (
@@ -10,7 +11,7 @@ export default function UpperNavbar() {
           <Logo />
         </div>
 
-        <nav className="hidden h-17 items-center gap-6 text-xs lg:flex">
+        <nav className="hidden h-17 items-center gap-6 text-sm lg:flex">
           <button className="flex items-center gap-2 mr-8 text-[#0b66ff]">
             <svg
               viewBox="0 0 512 512"
@@ -35,7 +36,7 @@ export default function UpperNavbar() {
 
           <button className="font-bold text-slate-700">LIST</button>
 
-          <button className="relative flex h-17 items-center px-4 text-xs font-bold text-[#0b66ff]">
+          <button className="relative flex h-17 items-center px-2 text-sm font-bold text-[#0b66ff]">
             VEHICLE INFO
             <span className="absolute bottom-0 left-0 h-1 w-full rounded-t-full bg-[#0b66ff]" />
           </button>
@@ -45,7 +46,7 @@ export default function UpperNavbar() {
         <i className="fa fa-bell" aria-hidden="true"></i>
 
         {/* <Menu size={20} className="cursor-pointer text-slate-700" /> */}
-        <img src="./Ham.png" alt="iAlert" title="Menu"></img>
+        <Image src="/Ham.png" alt="iAlert" title="Menu" width={33} height={24} />
       </div>
     </header>
   );

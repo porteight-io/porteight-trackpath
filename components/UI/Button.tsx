@@ -9,9 +9,9 @@ const Button = (props: ButtonProps) => {
       : "bg-white text-slate-900 hover:bg-slate-50 border border-slate-200 shadow-sm";
 
   const sizeVariant = {
-    sm: "text-xs px-3 py-1.5",
-    md: "text-sm px-4 py-2",
-    lg: "text-base px-5 py-2.5",
+    sm: "text-xs px-4 py-2",
+    md: "text-sm px-5 py-2",
+    lg: "text-sm px-3 py-1.5",
   }[props.size];
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -26,7 +26,7 @@ const Button = (props: ButtonProps) => {
       <button
         onClick={handleSubmit}
         disabled={props.disabled}
-        className={`${btnVariant} ${sizeVariant} mt-2 inline-flex items-center justify-center gap-2 rounded-full ${props.variant === "primary" && "font-bold"} ${props.variant === "secondary" && props.text === "Trace" && "bg-white text-black"} transition-colors cursor-pointer`}
+        className={`${btnVariant} ${sizeVariant} mt-2 inline-flex items-center justify-center gap-2 rounded-full ${props.variant === "primary" && "font-bold text-xs"} ${props.variant === "secondary" && props.text === "Trace" && "bg-white text-black"} transition-colors cursor-pointer`}
       >
         {props.frontIcon} {props.text} {props.backIcon}
       </button>

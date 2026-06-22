@@ -9,7 +9,7 @@ import { Check, ChevronDown, Play, RotateCw } from "lucide-react";
 import { useCallback, useEffect, useState, useRef, useMemo } from "react";
 import Button from "./UI/Button";
 import { useTracking } from "@/hooks/useTracking";
-import { List } from "react-window";
+import { RiArrowDropDownFill } from "@remixicon/react";
 
 export default function FilterBar() {
   const [regNumber, setRegNumber] = useState("Truck No.");
@@ -60,9 +60,11 @@ export default function FilterBar() {
   }, [setTruckData]);
 
   useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      // @ts-ignore
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !(dropdownRef.current as HTMLElement).contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -124,10 +126,12 @@ export default function FilterBar() {
 
       const flattenedData = response?.data?.flat() || [];
 
-      const coordinates = flattenedData.map((item: any) => ({
-        lat: Number(item.latitude),
-        lng: Number(item.longitude),
-      }));
+      const coordinates = flattenedData.map(
+        (item: { latitude: string; longitude: string }) => ({
+          lat: Number(item.latitude),
+          lng: Number(item.longitude),
+        }),
+      );
 
       setTrackPath(coordinates);
 
@@ -168,47 +172,20 @@ export default function FilterBar() {
     alert("Play!");
   };
 
-  const Row = ({
-    index,
-    style,
-  }: {
-    index: number;
-    style: React.CSSProperties;
-  }) => {
-    const item = filteredVehicles[index];
-
-    return (
-      <div
-        style={style}
-        className="cursor-pointer border-b px-4 py-2 hover:bg-slate-100"
-        onClick={() => {
-          setRegNumber(item.registrationNo);
-          setSearch(item.registrationNo);
-          setTruckData((prev) => ({
-            ...prev,
-            truck_no: item.registrationNo,
-            model: item.model || "",
-          }));
-          setIsDropdownOpen(false);
-        }}
-      >
-        {item.registrationNo}
-      </div>
-    );
-  };
-
   return (
-    <section className="border-b border-slate-200 bg-white lg:px-18 md:px-10 px-6 py-3">
-      {error && <p className="mb-2 text-xs font-medium text-red-500">{error}</p>}
+    <section className="border-b border-slate-200 bg-white lg:px-18 md:px-10 px-6 pb-3 pt-1 font-['Calibri',_sans-serif]">
+      {error && (
+        <p className="mb-2 text-xs font-medium text-red-500">{error}</p>
+      )}
 
       <div className="flex flex-wrap items-end justify-between gap-5">
-        <div className="flex flex-wrap items-end gap-2">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-wrap items-end gap-5">
+          <div className="flex flex-col">
             <div className="relative">
               <div className="flex flex-col">
-                <label className="text-xs text-slate-500">Reg Number</label>
+                <label className="text-[12px] text-slate-500">Reg Number</label>
 
-                <div ref={dropdownRef} className="relative w-64">
+                <div ref={dropdownRef} className="relative w-60">
                   <input
                     type="text"
                     value={search || regNumber}
@@ -219,28 +196,33 @@ export default function FilterBar() {
                       setRegNumber(e.target.value);
                       setIsDropdownOpen(true);
                     }}
-                    className="h-11 w-full border-b border-slate-300 bg-transparent pr-8 font-medium text-slate-500 outline-none"
+                    className="h-8 w-full border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
                   />
 
-                  <ChevronDown
-                    size={18}
-                    className="pointer-events-none absolute right-0 top-3 text-slate-500"
-                  />
+                  <RiArrowDropDownFill size={16} className="absolute right-0 top-3 text-slate-600" />
 
                   {isDropdownOpen && (
-                    <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-md border bg-white shadow-lg">
+                    <div className="absolute z-50 mt-2 max-h-[300px] w-full overflow-y-auto rounded-md border bg-white shadow-lg">
                       {filteredVehicles.length > 0 ? (
-                        <List
-                          style={{
-                            height: 300,
-                            width: "100%",
-                          }}
-                          rowCount={filteredVehicles.length}
-                          rowHeight={40}
-                          rowComponent={Row}
-                          // @ts-ignore
-                          rowProps={{}}
-                        />
+                        filteredVehicles.map((item) => (
+                          <button
+                            key={item.registrationNo}
+                            type="button"
+                            className="w-full cursor-pointer border-b px-4 py-2 text-left text-sm hover:bg-slate-100"
+                            onClick={() => {
+                              setRegNumber(item.registrationNo);
+                              setSearch(item.registrationNo);
+                              setTruckData((prev) => ({
+                                ...prev,
+                                truck_no: item.registrationNo,
+                                model: item.model || "",
+                              }));
+                              setIsDropdownOpen(false);
+                            }}
+                          >
+                            {item.registrationNo}
+                          </button>
+                        ))
                       ) : (
                         <div className="p-4 text-sm text-slate-500">
                           No vehicle found
@@ -254,84 +236,87 @@ export default function FilterBar() {
           </div>
 
           <div className="flex flex-col">
-            <label className="text-xs text-slate-500">Start Date</label>
+            <label className="text-[12px] text-slate-500">Start Date</label>
             <input
               type="date"
               value={startDate}
               max={endDate || undefined}
               onChange={(e) => setStartDate(e.target.value)}
-              className="h-11 border-b border-slate-300 bg-transparent pr-8 font-medium text-slate-500 outline-none"
+              className="h-8 border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
             />
           </div>
 
           <div className="flex flex-col">
-            <label className="text-xs text-slate-500">End Date</label>
+            <label className="text-[12px] text-slate-500">End Date</label>
             <input
               type="date"
               value={endDate}
               min={startDate || undefined}
               onChange={(e) => setEndDate(e.target.value)}
-              className="h-11 border-b border-slate-300 bg-transparent pr-8 font-medium text-slate-500 outline-none"
+              className="h-8 border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
             />
           </div>
 
-          <div className="flex flex-col">
-            <label className="text-xs text-slate-500">Start Time</label>
+          <div className="flex flex-col mr-4">
+            <label className="text-[12px] text-slate-500">Start Time</label>
             <input
               type="time"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
-              className="h-11 border-b border-slate-300 bg-transparent font-medium text-slate-500 outline-none"
+              className="no-time-icon h-8 border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
             />
           </div>
 
           <div className="flex flex-col">
-            <label className="text-xs text-slate-500">End Time</label>
+            <label className="text-[12px] text-slate-500">End Time</label>
             <input
               type="time"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="h-11 border-b border-slate-300 bg-transparent font-medium text-slate-500 outline-none"
+              className="no-time-icon h-8 border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
             />
           </div>
 
-          <Button
-            variant="primary"
-            text={isLoading ? "Loading..." : "Submit"}
-            backIcon={<i className="fa fa-check" aria-hidden="true"></i>}
-            size="sm"
-            onClick={handleSubmit}
-            disabled={isLoading}
-          />
+          <div className="flex gap-6 ml-6">
+            <Button
+              variant="primary"
+              text={isLoading ? "Loading..." : "Submit"}
+              backIcon={
+                <i className="fa fa-check text-[10px]" aria-hidden="true"></i>
+              }
+              size="md"
+              onClick={handleSubmit}
+              disabled={isLoading}
+            />
 
-          <Button
-            variant="primary"
-            text="Reset"
-            backIcon={<RotateCw size={16} />}
-            size="sm"
-            onClick={handleReset}
-            disabled={isLoading}
-          />
+            <Button
+              variant="primary"
+              text="Reset"
+              backIcon={<RotateCw size={12} />}
+              size="md"
+              onClick={handleReset}
+              disabled={isLoading}
+            />
+          </div>
         </div>
 
         <div className="flex items-end gap-12">
           <div className="flex flex-col">
-            <label className="text-xs text-slate-500">Speed</label>
+            <label className="text-[12px] text-slate-500">Speed</label>
             <div className="relative">
               <select
                 value={speed}
                 onChange={(e) => setSpeed(e.target.value)}
-                className="h-11 appearance-none border-b border-slate-300 bg-transparent pr-8 font-medium text-slate-700 outline-none"
+                className="h-8 appearance-none border-b border-slate-300 bg-transparent pr-8 font-medium outline-none text-[15px]"
               >
                 <option value="1x">1x</option>
                 <option value="2x">2x</option>
                 <option value="4x">4x</option>
                 <option value="8x">8x</option>
               </select>
-              <ChevronDown
-                size={18}
-                className="pointer-events-none absolute right-0 top-3 text-slate-500"
-              />
+
+              <RiArrowDropDownFill size={16} className="absolute right-0 top-3 text-slate-600" />
+              
             </div>
           </div>
 
@@ -342,8 +327,8 @@ export default function FilterBar() {
             <Button
               variant="primary"
               text={isPlaying ? "Stop" : "Play"}
-              backIcon={<Play size={16} fill={"#000000"} />}
-              size="sm"
+              backIcon={<Play size={12} fill={"#000000"} />}
+              size="md"
               onClick={handlePlay}
             />
           </div>
@@ -352,4 +337,3 @@ export default function FilterBar() {
     </section>
   );
 }
-

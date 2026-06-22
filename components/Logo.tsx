@@ -3,7 +3,7 @@ import React from 'react'
 
 function Logo() {
   return (
-    <Image src="/ialertlogo.png" alt="Logo" width={100} height={50} />
+    <Image src="/ialertlogo.png" alt="Logo" width={120} height={60} />
   )
 }
 

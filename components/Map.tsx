@@ -66,16 +66,20 @@ function MapContent() {
             <Marker
               position={trackPath[0]}
               title="Start"
-              icon={{
-                path: "M 0,0 m -6,0 a 6,6 0 1,0 12,0 a 6,6 0 1,0 -12,0",
-                scale: 1,
-                fillColor: "#FF0000",
-                fillOpacity: 1,
-                strokeColor: "#ffffff",
-                strokeWeight: 2,
-              }}
+              // icon={{
+              //   path: "M 0,0 m -6,0 a 6,6 0 1,0 12,0 a 6,6 0 1,0 -12,0",
+              //   scale: 1,
+              //   fillColor: "#FF0000",
+              //   fillOpacity: 1,
+              //   strokeColor: "#ffffff",
+              //   strokeWeight: 2,
+              // }}
             />
-            <Marker position={trackPath[trackPath.length - 1]} title="End" />
+            <Marker position={trackPath[trackPath.length - 1]} title="End" icon={{
+              url: "/04.png",
+              scaledSize: { width: 48, height: 48, equals: () => true },
+              anchor: { x: 16, y: 16, equals: () => true },
+            }} />
           </>
         )}
         <Polyline />

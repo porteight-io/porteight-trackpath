@@ -14,6 +14,7 @@ import { useTracking } from "@/hooks/useTracking";
 import NodeGeocoder from "node-geocoder";
 import { useEffect, useState } from "react";
 import { getLocationName } from "@/helpers/getLocation";
+import { RiMapPin2Fill } from "@remixicon/react";
 
 export default function VehicleInfo() {
   const { truckData } = useTracking();
@@ -36,10 +37,10 @@ export default function VehicleInfo() {
   }, [lat, lon]);
 
   return (
-    <section className="bg-[#4377db] lg:px-18 md:px-10 px-6 py-6 text-white">
+    <section className="bg-[#4377db] lg:px-18 md:px-10 px-6 py-6 text-white font-calibri">
       <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center gap-3 text-sm">
-          <h2 className="text-lg font-medium">{truckData.truck_no}</h2>
+        <div className="flex flex-wrap items-center gap-1 text-sm">
+          <h2 className="text-lg font-medium mr-3">{truckData.truck_no}</h2>
           <div
             className={`${
               truckData?.eventStatus === "ON" ||
@@ -87,9 +88,9 @@ export default function VehicleInfo() {
               variant="secondary"
               text="Trace"
               frontIcon={
-                <i className="fa fa-map-marker" aria-hidden="true"></i>
+                <RiMapPin2Fill size={16} />
               }
-              size="sm"
+              size="lg"
             />
 
             <Button
@@ -98,14 +99,14 @@ export default function VehicleInfo() {
               frontIcon={
                 <i className="fa fa-line-chart" aria-hidden="true"></i>
               }
-              size="sm"
+              size="lg"
             />
 
             <Button
               variant="secondary"
               text="KPI Compare"
               frontIcon={<i className="fa fa-bar-chart" aria-hidden="true"></i>}
-              size="sm"
+              size="lg"
             />
 
             <Button
@@ -114,14 +115,14 @@ export default function VehicleInfo() {
               frontIcon={
                 <i className="fa fa-exclamation" aria-hidden="true"></i>
               }
-              size="sm"
+              size="lg"
             />
 
             <Button
               variant="secondary"
               text="Near by Places"
               frontIcon={<Building2 size={16} />}
-              size="sm"
+              size="lg"
             />
           </div>
 
@@ -132,14 +133,14 @@ export default function VehicleInfo() {
               backIcon={
                 <i className="fa fa-download" aria-hidden="true"></i>
               }
-              size="sm"
+              size="md"
             />
 
             <Button
               variant="primary"
               text="Share"
-              backIcon={<Share2 size={16} fill="#000000" />}
-              size="sm"
+              backIcon={<Share2 size={14} fill="#000000" />}
+              size="md"
             />
           </div>
         </div>

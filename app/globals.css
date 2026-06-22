@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --font-calibri: "Calibri", "Candara", "Segoe UI", Optima, Arial, sans-serif;
+}
+
 html,
 body {
 	height: 100%;
@@ -17,3 +21,17 @@ body {
 .no-scrollbar::-webkit-scrollbar {
 	display: none;
 }
+
+.no-time-icon {
+	appearance: none;
+	-moz-appearance: textfield;
+}
+
+.no-time-icon::-webkit-calendar-picker-indicator,
+.no-time-icon::-webkit-inner-spin-button {
+	display: none;
+	-webkit-appearance: none;
+}
+
+
+
