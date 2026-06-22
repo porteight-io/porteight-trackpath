@@ -63,46 +63,61 @@ function MapContent() {
       >
         {trackPath.length > 0 && (
           <>
+            <Marker position={trackPath[0]} title="Start" />
             <Marker
-              position={trackPath[0]}
-              title="Start"
-              // icon={{
-              //   path: "M 0,0 m -6,0 a 6,6 0 1,0 12,0 a 6,6 0 1,0 -12,0",
-              //   scale: 1,
-              //   fillColor: "#FF0000",
-              //   fillOpacity: 1,
-              //   strokeColor: "#ffffff",
-              //   strokeWeight: 2,
-              // }}
+              position={trackPath[trackPath.length - 1]}
+              title="End"
+              icon={{
+                url: "/04.png",
+                scaledSize: { width: 48, height: 48, equals: () => true },
+                anchor: { x: 16, y: 16, equals: () => true },
+              }}
             />
-            <Marker position={trackPath[trackPath.length - 1]} title="End" icon={{
-              url: "/04.png",
-              scaledSize: { width: 48, height: 48, equals: () => true },
-              anchor: { x: 16, y: 16, equals: () => true },
-            }} />
           </>
         )}
         <Polyline />
       </Map>
 
-      {/* Stats overlay — distance now computed inside APIProvider context */}
-      <div className="absolute left-2 top-15 z-40 w-43 text-xs overflow-hidden bg-white px-4 py-3 shadow-lg space-y-1">
-  {[
-    { label: "Distance", value: `${distance} km` },
-    { label: "Fuel Consumed", value: `${fuelConsumed} ltr` },
-    { label: "kmpl", value: "2.41" },
-    { label: "DEF Consumed", value: "1.18 ltr" },
-    { label: "Duration(hh:mm:ss)", value: "" },
-    { label: "Running Time", value: "06:47:00" },
-    { label: "Idling Time", value: "00:23:00" },
-    { label: "Halt Time", value: "07:08:00" },
-  ].map(({ label, value }) => (
-    <div key={label} className="grid grid-cols-[1fr_auto] items-center text-xs text-nowrap">
-      <span className={`pr-2 ${label !== "Duration(hh:mm:ss)" ? 'border-r-2 border-gray-300' : 'text-gray-500 text-center my-1'}`}>{label}</span>
-      <span className="pl-2 text-right">{value}</span>
-    </div>
-  ))}
-</div>
+      <div className="absolute left-2 top-15 z-40 w-[172px] bg-white px-3 py-2.5 text-xs shadow-lg">
+        <div className="flex flex-col gap-1.5">
+          {[
+            { label: "Distance", value: `${distance} km` },
+            { label: "Fuel Consumed", value: `${fuelConsumed} ltr` },
+            { label: "kmpl", value: "2.41" },
+            { label: "DEF Consumed", value: "1.18 ltr" },
+          ].map(({ label, value }) => (
+            <div key={label} className="flex items-center justify-between">
+              <span className="text-left text-gray-800">{label}</span>
+              <div className="flex items-center gap-1.5">
+                <div className="h-4 w-px bg-gray-300" />
+                <span className="text-right text-gray-800 min-w-[52px] text-right">
+                  {value}
+                </span>
+              </div>
+            </div>
+          ))}
+
+          <div className="py-0.5 text-center text-[10px] text-gray-500">
+            Duration(hh:mm:ss)
+          </div>
+
+          {[
+            { label: "Running Time", value: "06:47:00" },
+            { label: "Idling Time", value: "00:23:00" },
+            { label: "Halt Time", value: "07:08:00" },
+          ].map(({ label, value }) => (
+            <div key={label} className="flex items-center justify-between">
+              <span className="text-left text-gray-800">{label}</span>
+              <div className="flex items-center gap-1.5">
+                <div className="h-4 w-px bg-gray-300" />
+                <span className="text-right text-gray-800 min-w-[52px] text-right">
+                  {value}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </>
   );
 }
