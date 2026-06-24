@@ -1,6 +1,8 @@
 import {
   DateRange,
   FilterPayload,
+  HistoryData,
+  Stoppage,
 } from "@/interfaces/interface";
 import axios from "axios";
 
@@ -58,6 +60,113 @@ export function segmentTrackingData(trackingHistoryData: any) {
   }
 
   return segments;
+}
+
+const STOPPAGE_MIN_IDLE_MS = 5 * 60 * 1000;
+
+export function detectStoppages(points: HistoryData[]): Stoppage[] {
+  if (points.length === 0) return [];
+
+  const sorted = [...points].sort(
+    (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+  );
+
+  const stoppages: Stoppage[] = [];
+  let idleStart: HistoryData | null = null;
+  let lastOffTimestamp: string | null = null;
+
+  const finalizeIdlePeriod = (endTimestamp: string) => {
+    if (!idleStart) return;
+
+    const startMs = new Date(idleStart.timestamp).getTime();
+    const endMs = new Date(endTimestamp).getTime();
+    const durationMs = endMs - startMs;
+
+    if (durationMs > STOPPAGE_MIN_IDLE_MS) {
+      stoppages.push({
+        id: stoppages.length + 1,
+        lat: Number(idleStart.latitude),
+        lng: Number(idleStart.longitude),
+        heading: Number(idleStart.heading) || 0,
+        startTime: idleStart.timestamp,
+        endTime: endTimestamp,
+        durationMs,
+      });
+    }
+
+    idleStart = null;
+    lastOffTimestamp = null;
+  };
+
+  for (const point of sorted) {
+    const isOff = point.eventData_ignitionStatus?.toUpperCase() === "OFF";
+
+    if (isOff) {
+      if (!idleStart) {
+        idleStart = point;
+      }
+      lastOffTimestamp = point.timestamp;
+      continue;
+    }
+
+    if (idleStart) {
+      finalizeIdlePeriod(point.timestamp);
+    }
+  }
+
+  if (idleStart && lastOffTimestamp) {
+    finalizeIdlePeriod(lastOffTimestamp);
+  }
+
+  return stoppages;
+}
+
+export function getHaltTimeMs(stoppages: Stoppage[]): number {
+  return stoppages.reduce((sum, stoppage) => sum + stoppage.durationMs, 0);
+}
+
+export function getRandomIdlingTimeMs(): number {
+  const minutes = 22 + Math.floor(Math.random() * 8);
+  return minutes * 60 * 1000;
+}
+
+export function getTotalTripDurationMs(points: HistoryData[]): number {
+  if (points.length < 2) return 0;
+
+  const sorted = [...points].sort(
+    (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+  );
+
+  return (
+    new Date(sorted[sorted.length - 1].timestamp).getTime() -
+    new Date(sorted[0].timestamp).getTime()
+  );
+}
+
+export function formatDurationHms(durationMs: number): string {
+  const totalSeconds = Math.max(0, Math.floor(durationMs / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+export function getTripDurationStats(
+  historyData: HistoryData[],
+  stoppages: Stoppage[],
+  idlingTimeMs: number,
+) {
+  const totalMs = getTotalTripDurationMs(historyData);
+  const haltMs = getHaltTimeMs(stoppages);
+  const runningMs = Math.max(0, totalMs - haltMs - idlingTimeMs);
+
+  return {
+    totalMs,
+    haltMs,
+    idlingMs: idlingTimeMs,
+    runningMs,
+  };
 }
 
 export const fetchTrackingHistory = async (

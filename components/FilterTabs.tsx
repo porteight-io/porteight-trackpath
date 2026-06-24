@@ -1,4 +1,5 @@
 import {
+  detectStoppages,
   fetchTrackingHistory,
   getTodayString,
   validateFilters,
@@ -100,8 +101,7 @@ export default function FilterBar() {
 
   const dropdownRef = useRef(null);
 
-  const { setTrackPath } = useTracking();
-  const { setTruckData } = useTracking();
+  const { setTrackPath, setTruckData, setHistoryData, setStoppages } = useTracking();
 
   useEffect(() => {
     const fetchAndSeed = async () => {
@@ -214,6 +214,8 @@ export default function FilterBar() {
       );
 
       setTrackPath(coordinates);
+      setHistoryData(flattenedData);
+      setStoppages(detectStoppages(flattenedData));
 
       const latestEvent = flattenedData[flattenedData.length - 1];
 
@@ -243,6 +245,9 @@ export default function FilterBar() {
       setStartTime("00:00");
       setEndTime("23:59");
     }
+    setTrackPath([]);
+    setHistoryData([]);
+    setStoppages([]);
     setSpeed("2x");
     setError(null);
     setIsPlaying(false);

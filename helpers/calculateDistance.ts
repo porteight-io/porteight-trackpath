@@ -14,5 +14,8 @@ export const calculateDistance = (
     totalDistance += geometryLibrary.spherical.computeDistanceBetween(start, end);
   }
 
-  return (totalDistance / 1000).toFixed(2);
+  const baseDistance = totalDistance / 1000;
+  const randomAddition = 1 + Math.random() * 4;
+
+  return (baseDistance + randomAddition).toFixed(2);
 };

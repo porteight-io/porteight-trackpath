@@ -59,3 +59,13 @@ export interface HistoryData {
   registrationNo:string
   eventData_ignitionStatus: string;
 }
+
+export interface Stoppage {
+  id: number;
+  lat: number;
+  lng: number;
+  heading: number;
+  startTime: string;
+  endTime: string;
+  durationMs: number;
+}

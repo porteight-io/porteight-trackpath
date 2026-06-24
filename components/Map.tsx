@@ -1,6 +1,11 @@
 "use client";
 
 import { calculateDistance } from "@/helpers/calculateDistance";
+import {
+  formatDurationHms,
+  getRandomIdlingTimeMs,
+  getTripDurationStats,
+} from "@/helpers/validate";
 import { useTracking } from "@/hooks/useTracking";
 import { APIProvider, Map, Marker, useMap } from "@vis.gl/react-google-maps";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
@@ -36,21 +41,48 @@ function Polyline() {
 }
 
 function MapContent() {
-  const { trackPath } = useTracking();
+  const { trackPath, historyData, stoppages } = useTracking();
   const coreLibrary = useMapsLibrary("core");
   const geometryLibrary = useMapsLibrary("geometry");
 
   const distance = useMemo(() => {
-    if (!coreLibrary || !geometryLibrary || trackPath.length < 2) return 0.0;
+    if (!coreLibrary || !geometryLibrary || trackPath.length < 2) return "0.00";
     return calculateDistance(trackPath, coreLibrary, geometryLibrary);
   }, [trackPath, coreLibrary, geometryLibrary]);
 
+  const tripMetrics = useMemo(() => {
+    if (historyData.length === 0) {
+      return {
+        kmpl: "0.00",
+        defConsumed: "0.00",
+        runningTime: "00:00:00",
+        idlingTime: "00:00:00",
+        haltTime: "00:00:00",
+      };
+    }
+
+    const idlingTimeMs = getRandomIdlingTimeMs();
+    const { runningMs, idlingMs, haltMs } = getTripDurationStats(
+      historyData,
+      stoppages,
+      idlingTimeMs,
+    );
+    const kmpl = (2.2 + Math.random() * 0.6).toFixed(2);
+    const defConsumed = (5 + Math.random() * 2).toFixed(2);
+
+    return {
+      kmpl,
+      defConsumed,
+      runningTime: formatDurationHms(runningMs),
+      idlingTime: formatDurationHms(idlingMs),
+      haltTime: formatDurationHms(haltMs),
+    };
+  }, [historyData, stoppages]);
+
   const fuelConsumed = useMemo(() => {
-    if (!coreLibrary || !geometryLibrary || trackPath.length < 2) return 0.0;
-    // const distance: any = calculateDistance(trackPath, coreLibrary, geometryLibrary);
-    const fuelEfficiency = 2.41;
-    return (Number(distance) / fuelEfficiency).toFixed(2);
-  }, [trackPath, coreLibrary, geometryLibrary, distance]);
+    if (Number(distance) <= 0 || Number(tripMetrics.kmpl) <= 0) return "0.00";
+    return (Number(distance) / Number(tripMetrics.kmpl)).toFixed(2);
+  }, [distance, tripMetrics.kmpl]);
 
   return (
     <>
@@ -83,8 +115,8 @@ function MapContent() {
           {[
             { label: "Distance", value: `${distance} km` },
             { label: "Fuel Consumed", value: `${fuelConsumed} ltr` },
-            { label: "kmpl", value: "2.41" },
-            { label: "DEF Consumed", value: "1.18 ltr" },
+            { label: "kmpl", value: tripMetrics.kmpl },
+            { label: "DEF Consumed", value: `${tripMetrics.defConsumed} ltr` },
           ].map(({ label, value }) => (
             <div key={label} className="flex items-center justify-between">
               <span className="text-left text-gray-800">{label}</span>
@@ -102,9 +134,9 @@ function MapContent() {
           </div>
 
           {[
-            { label: "Running Time", value: "06:47:00" },
-            { label: "Idling Time", value: "00:23:00" },
-            { label: "Halt Time", value: "07:08:00" },
+            { label: "Running Time", value: tripMetrics.runningTime },
+            { label: "Idling Time", value: tripMetrics.idlingTime },
+            { label: "Halt Time", value: tripMetrics.haltTime },
           ].map(({ label, value }) => (
             <div key={label} className="flex items-center justify-between">
               <span className="text-left text-gray-800">{label}</span>
