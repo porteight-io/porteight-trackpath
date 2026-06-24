@@ -39,48 +39,6 @@ export default function VehicleInfo() {
   return (
     <section className="bg-[#4377db] lg:px-18 md:px-10 px-6 py-6 text-white font-calibri">
       <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center gap-1 text-sm">
-          <div
-            className={`${
-              truckData?.eventStatus === "ON" ||
-              truckData?.eventStatus === "OFF"
-                ? "block"
-                : "hidden"
-            }`}
-          >
-            <span className="rounded bg-red-600 px-2 text-xs font-bold uppercase">
-              {truckData.eventStatus}
-            </span>
-
-            <span className="font-medium text-xs uppercase text-gray-100">
-              {truckData.eventStatus === "ON" ? "Running" : "Stopped"}
-            </span>
-          </div>
-
-          <span>|</span>
-
-          <span className="text-xs flex items-center gap-1">
-            <span className="font-semibold">Model</span>{" "}
-            <span className="text-gray-100">{truckData.model}</span>
-          </span>
-
-          <span>|</span>
-
-          <span className="text-xs flex items-center gap-1">
-            <span className="font-semibold">Reporting Time</span>
-            <span className="text-gray-100">27-01-2026 06:56:44 PM</span>
-          </span>
-
-          <span>|</span>
-
-          <span className="text-xs flex items-center gap-1">
-            <span className="font-semibold">Current Location</span>
-            <span className="text-gray-100">
-              {location || "Location not available"}
-            </span>
-          </span>
-        </div>
-
         <div className="flex flex-wrap items-center justify-between gap-5">
           <div className="flex flex-wrap items-center gap-4">
             <Button
