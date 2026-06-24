@@ -40,7 +40,6 @@ export default function VehicleInfo() {
     <section className="bg-[#4377db] lg:px-18 md:px-10 px-6 py-6 text-white font-calibri">
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-1 text-sm">
-          <h2 className="text-lg font-medium mr-3">{truckData.truck_no}</h2>
           <div
             className={`${
               truckData?.eventStatus === "ON" ||

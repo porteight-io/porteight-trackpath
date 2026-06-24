@@ -6,10 +6,81 @@ import {
 import { FilterPayload, VehicleNumber } from "@/interfaces/interface";
 import { getRegNo } from "@/services/regno.service";
 import { Check, ChevronDown, Play, RotateCw } from "lucide-react";
-import { useCallback, useEffect, useState, useRef, useMemo } from "react";
+import { useCallback, useEffect, useState, useRef, useMemo, ChangeEvent } from "react";
 import Button from "./UI/Button";
 import { useTracking } from "@/hooks/useTracking";
 import { RiArrowDropDownFill } from "@remixicon/react";
+
+function formatTime24h(time: string) {
+  const [hours = "0", minutes = "0"] = time.split(":");
+  const parsed = new Date();
+  parsed.setHours(Number(hours), Number(minutes), 0, 0);
+
+  if (Number.isNaN(parsed.getTime())) return "00:00";
+
+  return `${String(parsed.getHours()).padStart(2, "0")}:${String(parsed.getMinutes()).padStart(2, "0")}`;
+}
+
+function isValidTime24h(time: string) {
+  return /^([01]\d|2[0-3]):[0-5]\d$/.test(time);
+}
+
+function normalizeTimeInput(value: string): string {
+  if (!value) return "";
+
+  const colonMatch = value.match(/^(\d{1,2}):(\d{1,2})$/);
+  if (colonMatch) {
+    return formatTime24h(`${colonMatch[1]}:${colonMatch[2].padEnd(2, "0")}`);
+  }
+
+  const digits = value.replace(/\D/g, "");
+  if (digits.length === 4) {
+    return formatTime24h(`${digits.slice(0, 2)}:${digits.slice(2)}`);
+  }
+
+  if (digits.length === 3) {
+    return formatTime24h(`${digits.slice(0, 1)}:${digits.slice(1)}`);
+  }
+
+  if (isValidTime24h(value)) {
+    return formatTime24h(value);
+  }
+
+  return value;
+}
+
+function TimeInput24({
+  value,
+  onChange,
+  className,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  className?: string;
+}) {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/[^\d:]/g, "").slice(0, 5);
+    onChange(raw);
+  };
+
+  const handleBlur = () => {
+    if (!value) return;
+    onChange(normalizeTimeInput(value));
+  };
+
+  return (
+    <input
+      type="text"
+      inputMode="numeric"
+      placeholder="HH:mm"
+      value={value}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      className={className}
+      title="24-hour format (HH:mm)"
+    />
+  );
+}
 
 export default function FilterBar() {
   const [regNumber, setRegNumber] = useState("Truck No.");
@@ -104,7 +175,16 @@ export default function FilterBar() {
   );
 
   const handleSubmit = async () => {
-    const payload = buildPayload();
+    const normalizedStartTime = normalizeTimeInput(startTime);
+    const normalizedEndTime = normalizeTimeInput(endTime);
+    setStartTime(normalizedStartTime);
+    setEndTime(normalizedEndTime);
+
+    const payload = {
+      ...buildPayload(),
+      startTime: normalizedStartTime,
+      endTime: normalizedEndTime,
+    };
     const validationError = validateFilters(payload);
 
     if (validationError) {
@@ -116,8 +196,8 @@ export default function FilterBar() {
     setIsLoading(true);
 
     try {
-      const fromDate = new Date(`${startDate}T${startTime}:00`);
-      const toDate = new Date(`${endDate}T${endTime}:00`);
+      const fromDate = new Date(`${startDate}T${normalizedStartTime}:00`);
+      const toDate = new Date(`${endDate}T${normalizedEndTime}:00`);
 
       const response = await fetchTrackingHistory(regNumber, {
         from: fromDate,
@@ -259,21 +339,19 @@ export default function FilterBar() {
 
           <div className="flex flex-col mr-4">
             <label className="text-[12px] text-slate-500">Start Time</label>
-            <input
-              type="time"
+            <TimeInput24
               value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              className="no-time-icon h-8 border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
+              onChange={setStartTime}
+              className="no-time-icon h-8 w-[72px] border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
             />
           </div>
 
           <div className="flex flex-col">
             <label className="text-[12px] text-slate-500">End Time</label>
-            <input
-              type="time"
+            <TimeInput24
               value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              className="no-time-icon h-8 border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
+              onChange={setEndTime}
+              className="no-time-icon h-8 w-[72px] border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
             />
           </div>
 
