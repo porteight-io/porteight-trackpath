@@ -7,7 +7,13 @@ import {
   getTripDurationStats,
 } from "@/helpers/validate";
 import { useTracking } from "@/hooks/useTracking";
-import { APIProvider, Map, Marker, useMap } from "@vis.gl/react-google-maps";
+import {
+  AdvancedMarker,
+  APIProvider,
+  Map,
+  Marker,
+  useMap,
+} from "@vis.gl/react-google-maps";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 import { useEffect, useMemo } from "react";
 
@@ -84,9 +90,14 @@ function MapContent() {
     return (Number(distance) / Number(tripMetrics.kmpl)).toFixed(2);
   }, [distance, tripMetrics.kmpl]);
 
+  const endTruckRotation = Math.random() * 360;
+
   return (
     <>
       <Map
+        {...{
+          mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID ?? "DEMO_MAP_ID",
+        }}
         defaultCenter={{ lat: 28.6139, lng: 77.209 }}
         defaultZoom={15}
         gestureHandling="greedy"
@@ -96,15 +107,18 @@ function MapContent() {
         {trackPath.length > 0 && (
           <>
             <Marker position={trackPath[0]} title="Start" />
-            <Marker
+            <AdvancedMarker
               position={trackPath[trackPath.length - 1]}
               title="End"
-              icon={{
-                url: "/04.png",
-                scaledSize: { width: 48, height: 48, equals: () => true },
-                anchor: { x: 16, y: 16, equals: () => true },
-              }}
-            />
+            >
+              <img
+                src="/04.png"
+                width={48}
+                height={48}
+                alt=""
+                style={{ transform: `rotate(${endTruckRotation}deg)` }}
+              />
+            </AdvancedMarker>
           </>
         )}
         <Polyline />
@@ -159,7 +173,10 @@ export default function MapPanel() {
 
   return (
     <section className="relative h-[calc(100vh-260px)] w-full overflow-hidden border border-gray-200">
-      <APIProvider apiKey={apiKey} libraries={["core", "maps", "geometry"]}>
+      <APIProvider
+        apiKey={apiKey}
+        libraries={["core", "maps", "geometry", "marker"]}
+      >
         <MapContent />
       </APIProvider>
     </section>
