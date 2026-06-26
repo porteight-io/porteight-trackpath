@@ -3,7 +3,9 @@
 import { calculateDistance } from "@/helpers/calculateDistance";
 import {
   formatDurationHms,
-  getRandomIdlingTimeMs,
+  getFuelMetrics,
+  getIdlingTimeMs,
+  getMarkerRotation,
   getTripDurationStats,
 } from "@/helpers/validate";
 import { useTracking } from "@/hooks/useTracking";
@@ -67,14 +69,13 @@ function MapContent() {
       };
     }
 
-    const idlingTimeMs = getRandomIdlingTimeMs();
+    const idlingTimeMs = getIdlingTimeMs(historyData);
     const { runningMs, idlingMs, haltMs } = getTripDurationStats(
       historyData,
       stoppages,
       idlingTimeMs,
     );
-    const kmpl = (2.2 + Math.random() * 0.6).toFixed(2);
-    const defConsumed = (5 + Math.random() * 2).toFixed(2);
+    const { kmpl, defConsumed } = getFuelMetrics(historyData);
 
     return {
       kmpl,
@@ -90,7 +91,10 @@ function MapContent() {
     return (Number(distance) / Number(tripMetrics.kmpl)).toFixed(2);
   }, [distance, tripMetrics.kmpl]);
 
-  const endTruckRotation = Math.random() * 360;
+  const endTruckRotation = useMemo(
+    () => getMarkerRotation(trackPath),
+    [trackPath],
+  );
 
   return (
     <>
@@ -136,7 +140,7 @@ function MapContent() {
               <span className="text-left text-gray-800">{label}</span>
               <div className="flex items-center gap-1.5">
                 <div className="h-4 w-px bg-gray-300" />
-                <span className="text-right text-gray-800 min-w-[52px] text-right">
+                <span className="min-w-[52px] text-right text-gray-800">
                   {value}
                 </span>
               </div>
@@ -156,7 +160,7 @@ function MapContent() {
               <span className="text-left text-gray-800">{label}</span>
               <div className="flex items-center gap-1.5">
                 <div className="h-4 w-px bg-gray-300" />
-                <span className="text-right text-gray-800 min-w-[52px] text-right">
+                <span className="min-w-[52px] text-right text-gray-800">
                   {value}
                 </span>
               </div>

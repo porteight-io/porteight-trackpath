@@ -1,16 +1,27 @@
 import {
   detectStoppages,
   fetchTrackingHistory,
+  formatDateForFilter,
   getTodayString,
+  parseFilterDate,
   validateFilters,
 } from "@/helpers/validate";
 import { FilterPayload, VehicleNumber } from "@/interfaces/interface";
 import { getRegNo } from "@/services/regno.service";
-import { Check, ChevronDown, Play, RotateCw } from "lucide-react";
-import { useCallback, useEffect, useState, useRef, useMemo, ChangeEvent } from "react";
+import { Play, RotateCw } from "lucide-react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+  ChangeEvent,
+} from "react";
 import Button from "./UI/Button";
 import { useTracking } from "@/hooks/useTracking";
 import { RiArrowDropDownFill } from "@remixicon/react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function formatTime24h(time: string) {
   const [hours = "0", minutes = "0"] = time.split(":");
@@ -86,8 +97,8 @@ function TimeInput24({
 export default function FilterBar() {
   const [regNumber, setRegNumber] = useState("Truck No.");
   const [vehicleNumbers, setVehicleNumbers] = useState<VehicleNumber[]>([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [speed, setSpeed] = useState("2x");
@@ -101,7 +112,8 @@ export default function FilterBar() {
 
   const dropdownRef = useRef(null);
 
-  const { setTrackPath, setTruckData, setHistoryData, setStoppages } = useTracking();
+  const { setTrackPath, setTruckData, setHistoryData, setStoppages } =
+    useTracking();
 
   useEffect(() => {
     const fetchAndSeed = async () => {
@@ -112,8 +124,9 @@ export default function FilterBar() {
         const first = numbers?.[0];
         if (first) {
           setRegNumber(first.registrationNo);
-          setStartDate(getTodayString());
-          setEndDate(getTodayString());
+          const today = parseFilterDate(getTodayString());
+          setStartDate(today);
+          setEndDate(today);
           setStartTime("00:00");
           setEndTime("23:59");
           setTruckData({
@@ -154,8 +167,8 @@ export default function FilterBar() {
   const buildPayload = useCallback(
     (): FilterPayload => ({
       regNumber,
-      startDate,
-      endDate,
+      startDate: startDate ? formatDateForFilter(startDate) : "",
+      endDate: endDate ? formatDateForFilter(endDate) : "",
       startTime,
       endTime,
     }),
@@ -196,8 +209,12 @@ export default function FilterBar() {
     setIsLoading(true);
 
     try {
-      const fromDate = new Date(`${startDate}T${normalizedStartTime}:00`);
-      const toDate = new Date(`${endDate}T${normalizedEndTime}:00`);
+      const fromDate = new Date(
+        `${formatDateForFilter(startDate!)}T${normalizedStartTime}:00`,
+      );
+      const toDate = new Date(
+        `${formatDateForFilter(endDate!)}T${normalizedEndTime}:00`,
+      );
 
       const response = await fetchTrackingHistory(regNumber, {
         from: fromDate,
@@ -240,8 +257,9 @@ export default function FilterBar() {
     const first = vehicleNumbers?.[0];
     setRegNumber("Truck No.");
     if (first) {
-      setStartDate(getTodayString());
-      setEndDate(getTodayString());
+      const today = parseFilterDate(getTodayString());
+      setStartDate(today);
+      setEndDate(today);
       setStartTime("00:00");
       setEndTime("23:59");
     }
@@ -284,7 +302,10 @@ export default function FilterBar() {
                     className="h-8 w-full border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
                   />
 
-                  <RiArrowDropDownFill size={16} className="absolute right-0 top-3 text-slate-600" />
+                  <RiArrowDropDownFill
+                    size={16}
+                    className="absolute right-0 top-3 text-slate-600"
+                  />
 
                   {isDropdownOpen && (
                     <div className="absolute z-50 mt-2 max-h-[300px] w-full overflow-y-auto rounded-md border bg-white shadow-lg">
@@ -322,23 +343,31 @@ export default function FilterBar() {
 
           <div className="flex flex-col">
             <label className="text-[12px] text-slate-500">Start Date</label>
-            <input
-              type="date"
-              value={startDate}
-              max={endDate || undefined}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="h-8 border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
+
+            <DatePicker
+              selected={startDate}
+              onChange={(date: Date | null) => setStartDate(date)}
+              selectsStart
+              startDate={startDate ?? undefined}
+              endDate={endDate ?? undefined}
+              maxDate={endDate ?? undefined}
+              dateFormat="dd-MM-yyyy"
+              className="h-8 w-full border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
             />
           </div>
 
           <div className="flex flex-col">
             <label className="text-[12px] text-slate-500">End Date</label>
-            <input
-              type="date"
-              value={endDate}
-              min={startDate || undefined}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="h-8 border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
+
+            <DatePicker
+              selected={endDate}
+              onChange={(date: Date | null) => setEndDate(date)}
+              selectsEnd
+              startDate={startDate ?? undefined}
+              endDate={endDate ?? undefined}
+              minDate={startDate ?? undefined}
+              dateFormat="dd-MM-yyyy"
+              className="h-8 w-full border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
             />
           </div>
 
@@ -398,8 +427,10 @@ export default function FilterBar() {
                 <option value="8x">8x</option>
               </select>
 
-              <RiArrowDropDownFill size={16} className="absolute right-0 top-3 text-slate-600" />
-              
+              <RiArrowDropDownFill
+                size={16}
+                className="absolute right-0 top-3 text-slate-600"
+              />
             </div>
           </div>
 

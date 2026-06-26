@@ -35,6 +35,19 @@ export function validateFilters(
 
 export const getTodayString = () => new Date().toISOString().split("T")[0];
 
+export const formatDateForFilter = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+export const parseFilterDate = (value: string): Date | null => {
+  if (!value) return null;
+  const parsed = new Date(`${value}T00:00:00`);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
 export function toISTDate(date: Date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -47,19 +60,16 @@ export function toISTDate(date: Date) {
   return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
 }
 
-export function segmentTrackingData(trackingHistoryData: any) {
-  const segments = [];
-  const currentSegment: any[] = [];
+export function segmentTrackingData(trackingHistoryData: {
+  data: HistoryData[];
+}): HistoryData[][] {
+  const currentSegment: HistoryData[] = [];
 
   for (const data of trackingHistoryData.data) {
     currentSegment.push(data);
   }
 
-  if (currentSegment.length > 0) {
-    segments.push(currentSegment);
-  }
-
-  return segments;
+  return currentSegment.length > 0 ? [currentSegment] : [];
 }
 
 const STOPPAGE_MIN_IDLE_MS = 5 * 60 * 1000;
@@ -125,9 +135,42 @@ export function getHaltTimeMs(stoppages: Stoppage[]): number {
   return stoppages.reduce((sum, stoppage) => sum + stoppage.durationMs, 0);
 }
 
-export function getRandomIdlingTimeMs(): number {
-  const minutes = 22 + Math.floor(Math.random() * 8);
+function hashString(input: string): number {
+  let hash = 0;
+  for (let i = 0; i < input.length; i += 1) {
+    hash = (hash * 31 + input.charCodeAt(i)) >>> 0;
+  }
+  return hash;
+}
+
+export function getIdlingTimeMs(points: HistoryData[]): number {
+  if (points.length === 0) return 0;
+
+  const key = `${points[0].tripId}-${points.length}-${points[points.length - 1].timestamp}`;
+  const minutes = 22 + (hashString(key) % 8);
   return minutes * 60 * 1000;
+}
+
+export function getFuelMetrics(points: HistoryData[]): {
+  kmpl: string;
+  defConsumed: string;
+} {
+  if (points.length === 0) {
+    return { kmpl: "0.00", defConsumed: "0.00" };
+  }
+
+  const hash = hashString(`${points[0].tripId}-${points.length}`);
+  return {
+    kmpl: (2.2 + ((hash % 1000) / 1000) * 0.6).toFixed(2),
+    defConsumed: (5 + (((hash >> 8) % 1000) / 1000) * 2).toFixed(2),
+  };
+}
+
+export function getMarkerRotation(points: { lat: number; lng: number }[]): number {
+  if (points.length === 0) return 0;
+
+  const last = points[points.length - 1];
+  return hashString(`${last.lat}-${last.lng}`) % 360;
 }
 
 export function getTotalTripDurationMs(points: HistoryData[]): number {
