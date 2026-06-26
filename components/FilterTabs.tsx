@@ -1,9 +1,11 @@
 import {
+  bumpTruckRotationOnSubmit,
   detectStoppages,
   fetchTrackingHistory,
   formatDateForFilter,
   getTodayString,
   parseFilterDate,
+  resetTruckRotation,
   validateFilters,
 } from "@/helpers/validate";
 import { FilterPayload, VehicleNumber } from "@/interfaces/interface";
@@ -233,6 +235,7 @@ export default function FilterBar() {
       setTrackPath(coordinates);
       setHistoryData(flattenedData);
       setStoppages(detectStoppages(flattenedData));
+      bumpTruckRotationOnSubmit();
 
       const latestEvent = flattenedData[flattenedData.length - 1];
 
@@ -266,6 +269,7 @@ export default function FilterBar() {
     setTrackPath([]);
     setHistoryData([]);
     setStoppages([]);
+    resetTruckRotation();
     setSpeed("2x");
     setError(null);
     setIsPlaying(false);

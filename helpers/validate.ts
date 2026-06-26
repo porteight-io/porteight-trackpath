@@ -166,11 +166,53 @@ export function getFuelMetrics(points: HistoryData[]): {
   };
 }
 
-export function getMarkerRotation(points: { lat: number; lng: number }[]): number {
+export const SUBMIT_ROTATION_STEP_DEG = 45;
+
+let submitRotationOffset = 0;
+const submitRotationListeners = new Set<() => void>();
+
+function notifySubmitRotationListeners() {
+  submitRotationListeners.forEach((listener) => listener());
+}
+
+export function bumpTruckRotationOnSubmit() {
+  submitRotationOffset =
+    (submitRotationOffset + SUBMIT_ROTATION_STEP_DEG) % 360;
+  notifySubmitRotationListeners();
+}
+
+export function resetTruckRotation() {
+  submitRotationOffset = 0;
+  notifySubmitRotationListeners();
+}
+
+export function subscribeTruckRotation(listener: () => void) {
+  submitRotationListeners.add(listener);
+  return () => submitRotationListeners.delete(listener);
+}
+
+export function getTruckRotationOffset() {
+  return submitRotationOffset;
+}
+
+export function getMarkerRotation(
+  points: { lat: number; lng: number }[],
+  historyData: HistoryData[] = [],
+  extraDegrees = 0,
+): number {
   if (points.length === 0) return 0;
 
-  const last = points[points.length - 1];
-  return hashString(`${last.lat}-${last.lng}`) % 360;
+  const lastHistory = historyData[historyData.length - 1];
+  const heading = lastHistory ? Number(lastHistory.heading) : NaN;
+
+  const base =
+    Number.isFinite(heading) && heading >= 0
+      ? heading
+      : hashString(
+          `${points[points.length - 1].lat}-${points[points.length - 1].lng}`,
+        ) % 360;
+
+  return (base + extraDegrees) % 360;
 }
 
 export function getTotalTripDurationMs(points: HistoryData[]): number {
@@ -217,7 +259,7 @@ export const fetchTrackingHistory = async (
   range?: DateRange,
 ) => {
   const simulatorUrl = process.env.NEXT_PUBLIC_SIMULATOR_URL;
- 
+
   if (simulatorUrl && range?.from && range?.to) {
     try {
       const simulatorResponse = await axios.get(
@@ -230,7 +272,10 @@ export const fetchTrackingHistory = async (
       };
     } catch (simulatorError) {
       // Fall through to error handling below
-      console.error("Error fetching tracking history from simulator:", simulatorError);
+      console.error(
+        "Error fetching tracking history from simulator:",
+        simulatorError,
+      );
       return { error: "Failed to fetch tracking history from simulator." };
     }
   }

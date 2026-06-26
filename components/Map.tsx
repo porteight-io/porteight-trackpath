@@ -7,6 +7,8 @@ import {
   getIdlingTimeMs,
   getMarkerRotation,
   getTripDurationStats,
+  getTruckRotationOffset,
+  subscribeTruckRotation,
 } from "@/helpers/validate";
 import { useTracking } from "@/hooks/useTracking";
 import {
@@ -17,7 +19,8 @@ import {
   useMap,
 } from "@vis.gl/react-google-maps";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
-import { useEffect, useMemo } from "react";
+import Image from "next/image";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
 
 function Polyline() {
   const map = useMap();
@@ -91,9 +94,15 @@ function MapContent() {
     return (Number(distance) / Number(tripMetrics.kmpl)).toFixed(2);
   }, [distance, tripMetrics.kmpl]);
 
+  const submitRotationOffset = useSyncExternalStore(
+    subscribeTruckRotation,
+    getTruckRotationOffset,
+    getTruckRotationOffset,
+  );
+
   const endTruckRotation = useMemo(
-    () => getMarkerRotation(trackPath),
-    [trackPath],
+    () => getMarkerRotation(trackPath, historyData, submitRotationOffset),
+    [trackPath, historyData, submitRotationOffset],
   );
 
   return (
@@ -115,7 +124,7 @@ function MapContent() {
               position={trackPath[trackPath.length - 1]}
               title="End"
             >
-              <img
+              <Image
                 src="/04.png"
                 width={48}
                 height={48}
