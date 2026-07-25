@@ -52,9 +52,15 @@ function Polyline() {
 }
 
 function MapContent() {
-  const { trackPath, historyData, stoppages } = useTracking();
+  const { trackPath, historyData, stoppages, truckData } = useTracking();
   const coreLibrary = useMapsLibrary("core");
   const geometryLibrary = useMapsLibrary("geometry");
+
+  const submitRotationOffset = useSyncExternalStore(
+    subscribeTruckRotation,
+    getTruckRotationOffset,
+    getTruckRotationOffset,
+  );
 
   const distance = useMemo(() => {
     if (!coreLibrary || !geometryLibrary || trackPath.length < 2) return "0.00";
@@ -72,13 +78,21 @@ function MapContent() {
       };
     }
 
-    const idlingTimeMs = getIdlingTimeMs(historyData);
+    const idlingTimeMs = getIdlingTimeMs(
+      historyData,
+      truckData?.truck_no,
+      submitRotationOffset,
+    );
     const { runningMs, idlingMs, haltMs } = getTripDurationStats(
       historyData,
       stoppages,
       idlingTimeMs,
     );
-    const { kmpl, defConsumed } = getFuelMetrics(historyData);
+    const { kmpl, defConsumed } = getFuelMetrics(
+      historyData,
+      truckData?.truck_no,
+      submitRotationOffset,
+    );
 
     return {
       kmpl,
@@ -87,18 +101,12 @@ function MapContent() {
       idlingTime: formatDurationHms(idlingMs),
       haltTime: formatDurationHms(haltMs),
     };
-  }, [historyData, stoppages]);
+  }, [historyData, stoppages, truckData?.truck_no, submitRotationOffset]);
 
   const fuelConsumed = useMemo(() => {
     if (Number(distance) <= 0 || Number(tripMetrics.kmpl) <= 0) return "0.00";
     return (Number(distance) / Number(tripMetrics.kmpl)).toFixed(2);
   }, [distance, tripMetrics.kmpl]);
-
-  const submitRotationOffset = useSyncExternalStore(
-    subscribeTruckRotation,
-    getTruckRotationOffset,
-    getTruckRotationOffset,
-  );
 
   const endTruckRotation = useMemo(
     () => getMarkerRotation(trackPath, historyData, submitRotationOffset),

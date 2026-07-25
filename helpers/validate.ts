@@ -143,15 +143,30 @@ function hashString(input: string): number {
   return hash;
 }
 
-export function getIdlingTimeMs(points: HistoryData[]): number {
+export function getIdlingTimeMs(
+  points: HistoryData[],
+  truckNo?: string,
+  submitOffset: number = 0,
+): number {
   if (points.length === 0) return 0;
 
-  const key = `${points[0].tripId}-${points.length}-${points[points.length - 1].timestamp}`;
-  const minutes = 22 + (hashString(key) % 8);
+  const truckIdentifier =
+    truckNo ||
+    points[0]?.registrationNo ||
+    points[0]?.truckId ||
+    points[0]?.tripId ||
+    "TRUCK";
+
+  const key = `${truckIdentifier}-${points.length}-${submitOffset * 1013}-${points[0]?.timestamp || ""}-${points[points.length - 1]?.timestamp || ""}`;
+  const minutes = 15 + (hashString(key) % 25);
   return minutes * 60 * 1000;
 }
 
-export function getFuelMetrics(points: HistoryData[]): {
+export function getFuelMetrics(
+  points: HistoryData[],
+  truckNo?: string,
+  submitOffset: number = 0,
+): {
   kmpl: string;
   defConsumed: string;
 } {
@@ -159,10 +174,29 @@ export function getFuelMetrics(points: HistoryData[]): {
     return { kmpl: "0.00", defConsumed: "0.00" };
   }
 
-  const hash = hashString(`${points[0].tripId}-${points.length}`);
+  const truckIdentifier =
+    truckNo ||
+    points[0]?.registrationNo ||
+    points[0]?.truckId ||
+    points[0]?.tripId ||
+    "TRUCK";
+
+  const firstPointKey = `${points[0]?.latitude || ""},${points[0]?.longitude || ""}`;
+  const lastPointKey = `${points[points.length - 1]?.latitude || ""},${points[points.length - 1]?.longitude || ""}`;
+  const seedString = `${truckIdentifier}-${points.length}-${submitOffset * 7919 + 31}-${firstPointKey}-${lastPointKey}`;
+
+  const hash1 = hashString(seedString);
+  const hash2 = hashString(`${seedString}-def-consumed-${submitOffset * 104729}`);
+
+  // Generate randomized float for KMPL (between 2.20 and 6.80)
+  const kmplVal = 2.2 + ((hash1 % 460) / 100);
+
+  // Generate randomized float for DEF consumed (between 2.50 and 16.50)
+  const defVal = 2.5 + ((hash2 % 1400) / 100);
+
   return {
-    kmpl: (2.2 + ((hash % 1000) / 1000) * 0.6).toFixed(2),
-    defConsumed: (5 + (((hash >> 8) % 1000) / 1000) * 2).toFixed(2),
+    kmpl: kmplVal.toFixed(2),
+    defConsumed: defVal.toFixed(2),
   };
 }
 
