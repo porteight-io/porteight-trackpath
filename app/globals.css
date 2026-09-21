@@ -1,7 +1,31 @@
 @import "tailwindcss";
 
 @theme {
-  --font-calibri: "Calibri", "Candara", "Segoe UI", Optima, Arial, sans-serif;
+  /* Optima was the effective macOS fallback here and reads nothing like the
+     reference UI, which is Material/Roboto. */
+  --font-calibri: var(--font-roboto), "Segoe UI", "Helvetica Neue", Arial,
+    sans-serif;
+}
+
+/*
+ * Font scale from the reference app. Note their `* { font-size: 14px }` also
+ * hits <html>, so 1rem == 14px there; any rem value copied from their CSS is
+ * converted to px here rather than changing our root size (Tailwind spacing
+ * is rem-based and would shift with it).
+ */
+:root {
+	--font-size-mini: 8px;
+	--font-size-extra-small: 9px;
+	--font-size-10: 10px;
+	--font-size-small: 12px;
+	--font-size-regular: 13px;
+	--font-size-medium: 15px;
+	--font-size-large: 17px;
+	--font-size-extra-large: 19px;
+	--font-size-xx-large: 21px;
+	--font-size-xxx-large: 23px;
+	--font-size-huge: 25px;
+	--font-size-xx-huge: 27px;
 }
 
 html,
@@ -20,6 +44,28 @@ body {
 
 .no-scrollbar::-webkit-scrollbar {
 	display: none;
+}
+
+/*
+ * .page-name::after -- the trailing notch is a white CSS triangle laid over the
+ * chip's right edge (border trick, flipped), not a clip. 18px + 18px tall
+ * against a 35px chip, so it overhangs by 1px top and bottom.
+ */
+.tab-notch::after {
+	content: "";
+	position: absolute;
+	right: 0;
+	top: 0;
+	border-top: 18px solid transparent;
+	border-bottom: 18px solid transparent;
+	border-left: 16px solid #fff;
+	transform: rotate(180deg);
+}
+
+/* react-datepicker renders its own wrappers; make them fill the outlined field. */
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+	height: 100%;
 }
 
 .no-time-icon {

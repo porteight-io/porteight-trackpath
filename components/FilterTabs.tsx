@@ -1,3 +1,5 @@
+"use client";
+
 import {
   bumpTruckRotationOnSubmit,
   detectStoppages,
@@ -5,23 +7,28 @@ import {
   formatDateForFilter,
   getTodayString,
   parseFilterDate,
-  resetTruckRotation,
   validateFilters,
 } from "@/helpers/validate";
 import { FilterPayload, VehicleNumber } from "@/interfaces/interface";
 import { getRegNo } from "@/services/regno.service";
-import { Play, RotateCw } from "lucide-react";
 import {
+  AccessTimeFilledIcon,
+  ArrowDropDownIcon,
+  ClearIcon,
+  DateRangeIcon,
+  DownloadIcon,
+  SubmitIcon,
+} from "./FilterIcons";
+import {
+  ChangeEvent,
+  ReactNode,
   useCallback,
   useEffect,
-  useState,
-  useRef,
   useMemo,
-  ChangeEvent,
+  useRef,
+  useState,
 } from "react";
-import Button from "./UI/Button";
 import { useTracking } from "@/hooks/useTracking";
-import { RiArrowDropDownFill } from "@remixicon/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -96,25 +103,70 @@ function TimeInput24({
   );
 }
 
+/**
+ * The date/time fields: a ._div_1bxhq_6 wrapper carrying 10px of right padding,
+ * a ._label_1bxhq_11 floated onto the border, and a Bootstrap .form-control
+ * input that owns the 33px box, #898989 border and .375rem radius.
+ */
+function Field({
+  label,
+  width,
+  borderClass,
+  children,
+}: {
+  label: string;
+  width: number;
+  borderClass: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="relative shrink-0 pr-[10px]">
+      <span className="pointer-events-none absolute left-[8px] top-0 z-10 -translate-y-1/2 bg-white px-[5px] text-[11px] leading-[1.5] text-[#666]">
+        {label}
+      </span>
+      <div
+        style={{ width }}
+        className={`flex h-[33px] items-center gap-1 rounded-[5.25px] border pl-[10.5px] pr-[8px] ${borderClass}`}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+const fieldInputClass =
+  "h-full w-full min-w-0 bg-transparent text-[14px] font-normal leading-[21px] text-[#212529] outline-none placeholder:text-slate-400";
+
+/** The two time inputs render a step smaller than the date input. */
+const timeInputClass =
+  "h-full w-full min-w-0 bg-transparent text-[13px] font-normal leading-[19.5px] text-[#212529] outline-none placeholder:text-slate-400";
+
+const buttonBase =
+  "h-[33px] min-w-[64px] cursor-pointer items-center justify-center gap-2 whitespace-nowrap text-[12.25px] font-medium leading-[1.75] tracking-[0.35px] text-white transition-colors duration-[250ms] disabled:cursor-not-allowed disabled:opacity-70";
+
+/** MuiButton-outlined: 5px/15px padding, 5px radius, keeps the outlined border. */
+const submitButtonClass = `flex rounded-[5px] border border-[rgba(25,118,210,0.5)] bg-[#1d4897] px-[15px] py-[5px] ${buttonBase}`;
+
+/** MuiButton-contained: 6px/16px padding, 4px radius, no border, a shade lighter. */
+const downloadButtonClass = `inline-flex rounded-[4px] bg-[#1a4b95] px-[16px] py-[6px] ${buttonBase}`;
+
 export default function FilterBar() {
-  const [regNumber, setRegNumber] = useState("Truck No.");
+  const [regNumber, setRegNumber] = useState("");
   const [vehicleNumbers, setVehicleNumbers] = useState<VehicleNumber[]>([]);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [speed, setSpeed] = useState("2x");
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   const [search, setSearch] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const { setTrackPath, setTruckData, setHistoryData, setStoppages } =
+  const { historyData, setTrackPath, setTruckData, setHistoryData, setStoppages } =
     useTracking();
 
   useEffect(() => {
@@ -149,7 +201,7 @@ export default function FilterBar() {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
-        !(dropdownRef.current as HTMLElement).contains(event.target as Node)
+        !dropdownRef.current.contains(event.target as Node)
       ) {
         setIsDropdownOpen(false);
       }
@@ -160,10 +212,6 @@ export default function FilterBar() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
-
-  useEffect(() => {
-    getRegNo().then(setVehicleNumbers).catch(console.error);
   }, []);
 
   const buildPayload = useCallback(
@@ -256,201 +304,180 @@ export default function FilterBar() {
     }
   };
 
-  const handleReset = () => {
-    const first = vehicleNumbers?.[0];
-    setRegNumber("Truck No.");
-    if (first) {
-      const today = parseFilterDate(getTodayString());
-      setStartDate(today);
-      setEndDate(today);
-      setStartTime("00:00");
-      setEndTime("23:59");
+  const handleDownload = () => {
+    if (historyData.length === 0) {
+      setError("Nothing to download yet. Submit a search first.");
+      return;
     }
-    setTrackPath([]);
-    setHistoryData([]);
-    setStoppages([]);
-    resetTruckRotation();
-    setSpeed("2x");
-    setError(null);
-    setIsPlaying(false);
-  };
 
-  const handlePlay = async () => {
-    alert("Play!");
+    const columns = [
+      "timestamp",
+      "latitude",
+      "longitude",
+      "heading",
+      "eventData_ignitionStatus",
+    ] as const;
+
+    const rows = historyData.map((point) =>
+      columns.map((column) => point[column] ?? "").join(","),
+    );
+    const csv = [columns.join(","), ...rows].join("\n");
+
+    const url = URL.createObjectURL(
+      new Blob([csv], { type: "text/csv;charset=utf-8;" }),
+    );
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${regNumber || "trace"}-trace.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
-    <section className="border-b border-slate-200 bg-white lg:px-18 md:px-10 px-6 pb-3 pt-1 font-['Calibri',_sans-serif]">
+    <section className="shrink-0 bg-white pr-5 pt-[11px]">
       {error && (
         <p className="mb-2 text-xs font-medium text-red-500">{error}</p>
       )}
 
-      <div className="flex flex-wrap items-end justify-between gap-5">
-        <div className="flex flex-wrap items-end gap-5">
-          <div className="flex flex-col">
-            <div className="relative">
-              <div className="flex flex-col">
-                <label className="text-[12px] text-slate-500">Reg Number</label>
+      {/* .trace-header: flex, gap 10px, margin-bottom 10px. */}
+      <div className="mb-[10px] flex flex-wrap items-center gap-[10px]">
+        {/* MUI Autocomplete: 236px, input root padded 6px / 65px for the adornment. */}
+        <div ref={dropdownRef} className="relative w-[236px] shrink-0">
+          <span className="pointer-events-none absolute left-[8px] top-0 z-10 -translate-y-1/2 bg-white px-[5px] text-[11.25px] leading-[1.5] text-[#666]">
+            Reg No
+          </span>
+          <div className="relative flex h-[33px] items-center rounded-[4px] border border-[rgba(0,0,0,0.23)] py-[6px] pl-[6px] pr-[65px]">
+            <input
+              type="text"
+              value={isDropdownOpen ? search : regNumber}
+              placeholder="Search vehicle..."
+              onFocus={() => {
+                setSearch(regNumber);
+                setIsDropdownOpen(true);
+              }}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setIsDropdownOpen(true);
+              }}
+              className="h-full w-full min-w-0 bg-transparent pl-[8px] pr-[4px] text-[14px] font-normal tracking-[0.13132px] text-[rgba(0,0,0,0.87)] outline-none placeholder:text-slate-400"
+            />
 
-                <div ref={dropdownRef} className="relative w-60">
-                  <input
-                    type="text"
-                    value={search || regNumber}
-                    placeholder="Search vehicle..."
-                    onFocus={() => setIsDropdownOpen(true)}
-                    onChange={(e) => {
-                      setSearch(e.target.value);
-                      setRegNumber(e.target.value);
-                      setIsDropdownOpen(true);
-                    }}
-                    className="h-8 w-full border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
-                  />
-
-                  <RiArrowDropDownFill
-                    size={16}
-                    className="absolute right-0 top-3 text-slate-600"
-                  />
-
-                  {isDropdownOpen && (
-                    <div className="absolute z-50 mt-2 max-h-[300px] w-full overflow-y-auto rounded-md border bg-white shadow-lg">
-                      {filteredVehicles.length > 0 ? (
-                        filteredVehicles.map((item) => (
-                          <button
-                            key={item.registrationNo}
-                            type="button"
-                            className="w-full cursor-pointer border-b px-4 py-2 text-left text-sm hover:bg-slate-100"
-                            onClick={() => {
-                              setRegNumber(item.registrationNo);
-                              setSearch(item.registrationNo);
-                              setTruckData((prev) => ({
-                                ...prev,
-                                truck_no: item.registrationNo,
-                                model: item.model || "",
-                              }));
-                              setIsDropdownOpen(false);
-                            }}
-                          >
-                            {item.registrationNo}
-                          </button>
-                        ))
-                      ) : (
-                        <div className="p-4 text-sm text-slate-500">
-                          No vehicle found
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
+            {/* .MuiAutocomplete-endAdornment sits absolutely, 9px off the right. */}
+            <div className="absolute right-[9px] top-1/2 flex -translate-y-1/2 items-center">
+              {regNumber && (
+                <button
+                  type="button"
+                  title="Clear"
+                  aria-label="Clear"
+                  onClick={() => {
+                    setRegNumber("");
+                    setSearch("");
+                  }}
+                  className="grid h-[25.5px] w-[25.5px] cursor-pointer place-items-center rounded-full p-[4px] text-[rgba(0,0,0,0.54)]"
+                >
+                  <ClearIcon size={17.5} />
+                </button>
+              )}
+              <button
+                type="button"
+                aria-label="Open"
+                onClick={() => setIsDropdownOpen((open) => !open)}
+                className="grid h-[25px] w-[25px] cursor-pointer place-items-center rounded-full p-[2px] text-[#1a4b95]"
+              >
+                <ArrowDropDownIcon size={21} />
+              </button>
             </div>
           </div>
 
-          <div className="flex flex-col">
-            <label className="text-[12px] text-slate-500">Start Date</label>
+          {isDropdownOpen && (
+            <div className="absolute z-50 mt-1 max-h-[300px] w-full overflow-y-auto rounded-md border border-slate-200 bg-white shadow-lg">
+              {filteredVehicles.length > 0 ? (
+                filteredVehicles.map((item) => (
+                  <button
+                    key={item.registrationNo}
+                    type="button"
+                    className="w-full cursor-pointer border-b border-slate-100 px-4 py-2 text-left text-sm hover:bg-slate-100"
+                    onClick={() => {
+                      setRegNumber(item.registrationNo);
+                      setSearch("");
+                      setTruckData((prev) => ({
+                        ...prev,
+                        truck_no: item.registrationNo,
+                        model: item.model || "",
+                      }));
+                      setIsDropdownOpen(false);
+                    }}
+                  >
+                    {item.registrationNo}
+                  </button>
+                ))
+              ) : (
+                <div className="p-4 text-sm text-slate-500">
+                  No vehicle found
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
+        {/* .trace-header__datetime: 529px of flex with no gap of its own. */}
+        <div className="flex shrink-0">
+          <Field label="Start Date - End Date" width={200} borderClass="border-[#898989]">
             <DatePicker
+              selectsRange
               selected={startDate}
-              onChange={(date: Date | null) => setStartDate(date)}
-              selectsStart
               startDate={startDate ?? undefined}
               endDate={endDate ?? undefined}
-              maxDate={endDate ?? undefined}
+              onChange={([nextStart, nextEnd]) => {
+                setStartDate(nextStart);
+                setEndDate(nextEnd);
+              }}
               dateFormat="dd-MM-yyyy"
-              className="h-8 w-full border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
+              placeholderText="dd-mm-yyyy - dd-mm-yyyy"
+              wrapperClassName="flex-1 min-w-0 h-full"
+              className={fieldInputClass}
             />
-          </div>
+            <DateRangeIcon size={21} className="shrink-0 text-[#898989]" />
+          </Field>
 
-          <div className="flex flex-col">
-            <label className="text-[12px] text-slate-500">End Date</label>
-
-            <DatePicker
-              selected={endDate}
-              onChange={(date: Date | null) => setEndDate(date)}
-              selectsEnd
-              startDate={startDate ?? undefined}
-              endDate={endDate ?? undefined}
-              minDate={startDate ?? undefined}
-              dateFormat="dd-MM-yyyy"
-              className="h-8 w-full border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
-            />
-          </div>
-
-          <div className="flex flex-col mr-4">
-            <label className="text-[12px] text-slate-500">Start Time</label>
+          <Field label="Start Time" width={149.5} borderClass="border-[#d2d2d2]">
             <TimeInput24
               value={startTime}
               onChange={setStartTime}
-              className="no-time-icon h-8 w-[72px] border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
+              className={`no-time-icon ${timeInputClass}`}
             />
-          </div>
+            <AccessTimeFilledIcon size={21} className="shrink-0 text-[#898989]" />
+          </Field>
 
-          <div className="flex flex-col">
-            <label className="text-[12px] text-slate-500">End Time</label>
+          <Field label="End Time" width={149.5} borderClass="border-[#d2d2d2]">
             <TimeInput24
               value={endTime}
               onChange={setEndTime}
-              className="no-time-icon h-8 w-[72px] border-b border-slate-300 bg-transparent font-medium outline-none text-[15px]"
+              className={`no-time-icon ${timeInputClass}`}
             />
-          </div>
-
-          <div className="flex gap-6 ml-6">
-            <Button
-              variant="primary"
-              text={isLoading ? "Loading..." : "Submit"}
-              backIcon={
-                <i className="fa fa-check text-[10px]" aria-hidden="true"></i>
-              }
-              size="md"
-              onClick={handleSubmit}
-              disabled={isLoading}
-            />
-
-            <Button
-              variant="primary"
-              text="Reset"
-              backIcon={<RotateCw size={12} />}
-              size="md"
-              onClick={handleReset}
-              disabled={isLoading}
-            />
-          </div>
+            <AccessTimeFilledIcon size={21} className="shrink-0 text-[#898989]" />
+          </Field>
         </div>
 
-        <div className="flex items-end gap-12">
-          <div className="flex flex-col">
-            <label className="text-[12px] text-slate-500">Speed</label>
-            <div className="relative">
-              <select
-                value={speed}
-                onChange={(e) => setSpeed(e.target.value)}
-                className="h-8 appearance-none border-b border-slate-300 bg-transparent pr-8 font-medium outline-none text-[15px]"
-              >
-                <option value="1x">1x</option>
-                <option value="2x">2x</option>
-                <option value="4x">4x</option>
-                <option value="8x">8x</option>
-              </select>
+        {/* Each .trace-header__action is its own flex child of the 10px row. */}
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={isLoading}
+          className={submitButtonClass}
+        >
+          {isLoading ? "Loading..." : "Submit"}
+          <SubmitIcon size={22} className="-mr-1" />
+        </button>
 
-              <RiArrowDropDownFill
-                size={16}
-                className="absolute right-0 top-3 text-slate-600"
-              />
-            </div>
-          </div>
-
-          <div className="relative">
-            <span className="absolute -right-3 -top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
-              New
-            </span>
-            <Button
-              variant="primary"
-              text={isPlaying ? "Stop" : "Play"}
-              backIcon={<Play size={12} fill={"#000000"} />}
-              size="md"
-              onClick={handlePlay}
-            />
-          </div>
-        </div>
+        <button
+          type="button"
+          onClick={handleDownload}
+          className={downloadButtonClass}
+        >
+          Download
+          <DownloadIcon size={18} className="-mr-1" />
+        </button>
       </div>
     </section>
   );

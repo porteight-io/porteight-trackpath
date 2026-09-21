@@ -1,26 +1,22 @@
 "use client";
 
-import { calculateDistance } from "@/helpers/calculateDistance";
-import {
-  formatDurationHms,
-  getFuelMetrics,
-  getIdlingTimeMs,
-  getMarkerRotation,
-  getTripDurationStats,
-  getTruckRotationOffset,
-  subscribeTruckRotation,
-} from "@/helpers/validate";
+import { getTrackDots, PointStatus, STATUS_COLORS } from "@/helpers/trackPoints";
 import { useTracking } from "@/hooks/useTracking";
 import {
   AdvancedMarker,
   APIProvider,
   Map,
-  Marker,
   useMap,
+  useMapsLibrary,
 } from "@vis.gl/react-google-maps";
-import { useMapsLibrary } from "@vis.gl/react-google-maps";
-import Image from "next/image";
-import { useEffect, useMemo, useSyncExternalStore } from "react";
+import { CheckCircle2, Maximize2, Menu, Play } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+
+const LEGEND: { status: PointStatus; label: string }[] = [
+  { status: "running", label: "Running" },
+  { status: "stopped", label: "Stopped" },
+  { status: "idling", label: "Idling" },
+];
 
 function Polyline() {
   const map = useMap();
@@ -34,7 +30,7 @@ function Polyline() {
     const polyline = new mapsLibrary.Polyline({
       path: trackPath,
       geodesic: true,
-      strokeColor: "#008000",
+      strokeColor: "#1e77e8",
       strokeOpacity: 1,
       strokeWeight: 5,
     });
@@ -51,141 +47,194 @@ function Polyline() {
   return null;
 }
 
+function PinMarker({ color, letter }: { color: string; letter: string }) {
+  return (
+    <div className="relative h-[42px] w-[31px]">
+      <svg viewBox="0 0 24 33" className="h-full w-full drop-shadow-md">
+        <path
+          d="M12 0C5.373 0 0 5.373 0 12c0 8.4 12 21 12 21s12-12.6 12-21c0-6.627-5.373-12-12-12z"
+          fill={color}
+        />
+      </svg>
+      <span className="absolute inset-x-0 top-[5px] text-center text-[14px] font-bold leading-none text-white">
+        {letter}
+      </span>
+    </div>
+  );
+}
+
+function LegendPill({
+  label,
+  color,
+  active,
+  onToggle,
+}: {
+  label: string;
+  color: string;
+  active: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      style={{ borderColor: color }}
+      className={`flex cursor-pointer items-center gap-2.5 rounded-full border-2 bg-white py-1.5 pl-3 pr-2.5 shadow-md transition-opacity ${
+        active ? "opacity-100" : "opacity-45"
+      }`}
+    >
+      <span className="flex items-center">
+        <span
+          className="h-3 w-6 rounded-[3px]"
+          style={{ backgroundColor: color }}
+        />
+        <span
+          className="ml-px h-1.5 w-1 rounded-r-[2px]"
+          style={{ backgroundColor: color }}
+        />
+      </span>
+      <span className="text-[15px] font-semibold text-slate-800">{label}</span>
+      <CheckCircle2 size={19} className="text-white" fill={color} />
+    </button>
+  );
+}
+
 function MapContent() {
-  const { trackPath, historyData, stoppages, truckData } = useTracking();
-  const coreLibrary = useMapsLibrary("core");
-  const geometryLibrary = useMapsLibrary("geometry");
+  const { trackPath, historyData } = useTracking();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [mapType, setMapType] = useState<"roadmap" | "satellite">("roadmap");
+  const [visibleStatuses, setVisibleStatuses] = useState<
+    Record<PointStatus, boolean>
+  >({
+    running: true,
+    stopped: true,
+    idling: true,
+  });
 
-  const submitRotationOffset = useSyncExternalStore(
-    subscribeTruckRotation,
-    getTruckRotationOffset,
-    getTruckRotationOffset,
-  );
+  const dots = useMemo(() => getTrackDots(historyData), [historyData]);
 
-  const distance = useMemo(() => {
-    if (!coreLibrary || !geometryLibrary || trackPath.length < 2) return "0.00";
-    return calculateDistance(trackPath, coreLibrary, geometryLibrary);
-  }, [trackPath, coreLibrary, geometryLibrary]);
-
-  const tripMetrics = useMemo(() => {
-    if (historyData.length === 0) {
-      return {
-        kmpl: "0.00",
-        defConsumed: "0.00",
-        runningTime: "00:00:00",
-        idlingTime: "00:00:00",
-        haltTime: "00:00:00",
-      };
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+      return;
     }
-
-    const idlingTimeMs = getIdlingTimeMs(
-      historyData,
-      truckData?.truck_no,
-      submitRotationOffset,
-    );
-    const { runningMs, idlingMs, haltMs } = getTripDurationStats(
-      historyData,
-      stoppages,
-      idlingTimeMs,
-    );
-    const { kmpl, defConsumed } = getFuelMetrics(
-      historyData,
-      truckData?.truck_no,
-      submitRotationOffset,
-    );
-
-    return {
-      kmpl,
-      defConsumed,
-      runningTime: formatDurationHms(runningMs),
-      idlingTime: formatDurationHms(idlingMs),
-      haltTime: formatDurationHms(haltMs),
-    };
-  }, [historyData, stoppages, truckData?.truck_no, submitRotationOffset]);
-
-  const fuelConsumed = useMemo(() => {
-    if (Number(distance) <= 0 || Number(tripMetrics.kmpl) <= 0) return "0.00";
-    return (Number(distance) / Number(tripMetrics.kmpl)).toFixed(2);
-  }, [distance, tripMetrics.kmpl]);
-
-  const endTruckRotation = useMemo(
-    () => getMarkerRotation(trackPath, historyData, submitRotationOffset),
-    [trackPath, historyData, submitRotationOffset],
-  );
+    wrapperRef.current?.requestFullscreen();
+  };
 
   return (
-    <>
+    <div ref={wrapperRef} className="relative h-full w-full bg-white">
       <Map
         {...{
           mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID ?? "DEMO_MAP_ID",
         }}
         defaultCenter={{ lat: 28.6139, lng: 77.209 }}
         defaultZoom={15}
+        mapTypeId={mapType}
         gestureHandling="greedy"
-        disableDefaultUI={false}
+        mapTypeControl={false}
+        fullscreenControl={false}
+        zoomControl={false}
         className="h-full w-full"
       >
         {trackPath.length > 0 && (
           <>
-            <Marker position={trackPath[0]} title="Start" />
+            <AdvancedMarker
+              position={trackPath[0]}
+              title="Start"            >
+              <PinMarker color="#1a9e6b" letter="S" />
+            </AdvancedMarker>
+
+            {dots
+              .filter((dot) => visibleStatuses[dot.status])
+              .map((dot) => (
+                <AdvancedMarker
+                  key={dot.key}
+                  position={{ lat: dot.lat, lng: dot.lng }}
+                  anchorTop="-50%"
+                >
+                  <span
+                    className="block h-[11px] w-[11px] rounded-full"
+                    style={{ backgroundColor: STATUS_COLORS[dot.status] }}
+                  />
+                </AdvancedMarker>
+              ))}
+
             <AdvancedMarker
               position={trackPath[trackPath.length - 1]}
-              title="End"
-            >
-              <Image
-                src="/04.png"
-                width={48}
-                height={48}
-                alt=""
-                style={{ transform: `rotate(${endTruckRotation}deg)` }}
-              />
+              title="End"            >
+              <PinMarker color="#e0393e" letter="E" />
             </AdvancedMarker>
           </>
         )}
         <Polyline />
       </Map>
 
-      <div className="absolute left-2 top-15 z-40 w-[172px] bg-white px-3 py-2.5 text-xs shadow-lg">
-        <div className="flex flex-col gap-1.5">
-          {[
-            { label: "Distance", value: `${distance} km` },
-            { label: "Fuel Consumed", value: `${fuelConsumed} ltr` },
-            { label: "kmpl", value: tripMetrics.kmpl },
-            { label: "DEF Consumed", value: `${tripMetrics.defConsumed} ltr` },
-          ].map(({ label, value }) => (
-            <div key={label} className="flex items-center justify-between">
-              <span className="text-left text-gray-800">{label}</span>
-              <div className="flex items-center gap-1.5">
-                <div className="h-4 w-px bg-gray-300" />
-                <span className="min-w-[52px] text-right text-gray-800">
-                  {value}
-                </span>
-              </div>
-            </div>
-          ))}
-
-          <div className="py-0.5 text-center text-[10px] text-gray-500">
-            Duration(hh:mm:ss)
-          </div>
-
-          {[
-            { label: "Running Time", value: tripMetrics.runningTime },
-            { label: "Idling Time", value: tripMetrics.idlingTime },
-            { label: "Halt Time", value: tripMetrics.haltTime },
-          ].map(({ label, value }) => (
-            <div key={label} className="flex items-center justify-between">
-              <span className="text-left text-gray-800">{label}</span>
-              <div className="flex items-center gap-1.5">
-                <div className="h-4 w-px bg-gray-300" />
-                <span className="min-w-[52px] text-right text-gray-800">
-                  {value}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="absolute left-4 top-4 z-10 flex rounded-lg bg-[#eef0f3] p-1 shadow-md">
+        {(["roadmap", "satellite"] as const).map((type) => (
+          <button
+            key={type}
+            type="button"
+            onClick={() => setMapType(type)}
+            className={`cursor-pointer rounded-md px-6 py-2 text-[15px] transition-colors ${
+              mapType === type
+                ? "bg-white font-semibold text-slate-900 shadow-sm"
+                : "text-slate-600"
+            }`}
+          >
+            {type === "roadmap" ? "Map" : "Satellite"}
+          </button>
+        ))}
       </div>
-    </>
+
+      <div className="absolute left-4 top-[76px] z-10 flex flex-col items-start gap-3">
+        {LEGEND.map(({ status, label }) => (
+          <LegendPill
+            key={status}
+            label={label}
+            color={STATUS_COLORS[status]}
+            active={visibleStatuses[status]}
+            onToggle={() =>
+              setVisibleStatuses((prev) => ({
+                ...prev,
+                [status]: !prev[status],
+              }))
+            }
+          />
+        ))}
+      </div>
+
+      <div className="absolute right-4 top-4 z-10 flex items-center gap-4">
+        <button
+          type="button"
+          onClick={() => alert("Play!")}
+          className="flex cursor-pointer items-center gap-3 rounded-full bg-white py-1.5 pl-5 pr-1.5 shadow-md"
+        >
+          <span className="text-[15px] font-semibold text-slate-700">
+            Playback
+          </span>
+          <span className="grid h-8 w-8 place-items-center rounded-full bg-[#1a9e6b]">
+            <Play size={14} fill="#ffffff" className="translate-x-px text-white" />
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={toggleFullscreen}
+          title="Toggle fullscreen"
+          className="grid h-11 w-11 cursor-pointer place-items-center rounded-md bg-white shadow-md"
+        >
+          <Maximize2 size={20} className="text-slate-700" strokeWidth={1.8} />
+        </button>
+      </div>
+
+      <button
+        type="button"
+        className="absolute right-5 top-1/2 z-10 grid h-14 w-14 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-[#0e7c57] shadow-xl"
+        title="Map options"
+      >
+        <Menu size={24} className="text-white" />
+      </button>
+    </div>
   );
 }
 
@@ -193,7 +242,7 @@ export default function MapPanel() {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
 
   return (
-    <section className="relative h-[calc(100vh-260px)] w-full overflow-hidden border border-gray-200">
+    <section className="relative m-[5px] h-[calc(100%-8px)] min-w-0 flex-1 overflow-hidden rounded-[12px] shadow-[0_0_10px_#0000003d]">
       <APIProvider
         apiKey={apiKey}
         libraries={["core", "maps", "geometry", "marker"]}

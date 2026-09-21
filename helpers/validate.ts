@@ -135,7 +135,7 @@ export function getHaltTimeMs(stoppages: Stoppage[]): number {
   return stoppages.reduce((sum, stoppage) => sum + stoppage.durationMs, 0);
 }
 
-function hashString(input: string): number {
+export function hashString(input: string): number {
   let hash = 0;
   for (let i = 0; i < input.length; i += 1) {
     hash = (hash * 31 + input.charCodeAt(i)) >>> 0;
@@ -260,6 +260,28 @@ export function getTotalTripDurationMs(points: HistoryData[]): number {
     new Date(sorted[sorted.length - 1].timestamp).getTime() -
     new Date(sorted[0].timestamp).getTime()
   );
+}
+
+export function formatReportedAt(timestamp?: string): string {
+  if (!timestamp) return "--";
+
+  const parsed = new Date(timestamp);
+  if (Number.isNaN(parsed.getTime())) return "--";
+
+  const day = String(parsed.getDate()).padStart(2, "0");
+  const month = String(parsed.getMonth() + 1).padStart(2, "0");
+  const hours24 = parsed.getHours();
+  const meridiem = hours24 >= 12 ? "PM" : "AM";
+  const hours = String(hours24 % 12 || 12).padStart(2, "0");
+  const minutes = String(parsed.getMinutes()).padStart(2, "0");
+  const seconds = String(parsed.getSeconds()).padStart(2, "0");
+
+  return `${day}-${month}-${parsed.getFullYear()} ${hours}:${minutes}:${seconds} ${meridiem}`;
+}
+
+export function formatMeasure(value: number, decimals = 1): string {
+  if (!Number.isFinite(value)) return "0";
+  return Number.isInteger(value) ? String(value) : value.toFixed(decimals);
 }
 
 export function formatDurationHms(durationMs: number): string {
