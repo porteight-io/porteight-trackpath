@@ -9,7 +9,7 @@ import {
   useMap,
   useMapsLibrary,
 } from "@vis.gl/react-google-maps";
-import { CheckCircle2, Maximize2, Menu, Play } from "lucide-react";
+import { Maximize2, Menu, Play } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const LEGEND: { status: PointStatus; label: string }[] = [
@@ -79,22 +79,24 @@ function LegendPill({
       type="button"
       onClick={onToggle}
       style={{ borderColor: color }}
-      className={`flex cursor-pointer items-center gap-2.5 rounded-full border-2 bg-white py-1.5 pl-3 pr-2.5 shadow-md transition-opacity ${
+      className={`flex h-[35px] w-[120px] min-w-[120px] cursor-pointer items-center gap-1 rounded-[10px] border-2 bg-white py-1.5 pl-2 pr-2 shadow-md transition-opacity ${
         active ? "opacity-100" : "opacity-45"
       }`}
     >
-      <span className="flex items-center">
-        <span
-          className="h-3 w-6 rounded-[3px]"
-          style={{ backgroundColor: color }}
-        />
-        <span
-          className="ml-px h-1.5 w-1 rounded-r-[2px]"
-          style={{ backgroundColor: color }}
-        />
-      </span>
-      <span className="text-[15px] font-semibold text-slate-800">{label}</span>
-      <CheckCircle2 size={19} className="text-white" fill={color} />
+      <img
+        src={`https://ialert.ashokleyland.com/images/markers/${label.toUpperCase()}/3.svg`}
+        alt=""
+        className="h-5 w-6 shrink-0 object-contain"
+      />
+      <span className="whitespace-nowrap text-[12px] font-semibold text-slate-800">{label}</span>
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        className={`visible z-10 ${label === "Idling" ? "ml-5" : "ml-2"} block h-[22px] w-[22px] shrink-0 opacity-100`}
+        style={{ fill: color }}
+      >
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z" />
+      </svg>
     </button>
   );
 }
@@ -169,7 +171,7 @@ function MapContent() {
         <Polyline />
       </Map>
 
-      <div className="absolute left-4 top-4 z-10 flex rounded-lg bg-[#eef0f3] p-1 shadow-md">
+      <div className="map-type-toggle absolute left-2 top-4 z-10 flex rounded-lg bg-[#eef0f3] p-1 shadow-md">
         {(["roadmap", "satellite"] as const).map((type) => (
           <button
             key={type}
@@ -186,7 +188,7 @@ function MapContent() {
         ))}
       </div>
 
-      <div className="absolute left-4 top-[76px] z-10 flex flex-col items-start gap-3">
+      <div className="map-legend absolute left-4 top-[76px] z-10 flex flex-col items-start gap-3">
         {LEGEND.map(({ status, label }) => (
           <LegendPill
             key={status}
@@ -207,7 +209,7 @@ function MapContent() {
         <button
           type="button"
           onClick={() => alert("Play!")}
-          className="flex cursor-pointer items-center gap-3 rounded-full bg-white py-1.5 pl-5 pr-1.5 shadow-md"
+          className="flex cursor-pointer items-center gap-3 rounded-[10px] bg-white py-1.5 pl-5 pr-1.5 shadow-md"
         >
           <span className="text-[15px] font-semibold text-slate-700">
             Playback
@@ -242,7 +244,7 @@ export default function MapPanel() {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
 
   return (
-    <section className="relative m-[5px] h-[calc(100%-8px)] min-w-0 flex-1 overflow-hidden rounded-[12px] shadow-[0_0_10px_#0000003d]">
+    <section className="relative mb-[10px] mr-[5px] mt-[2px] h-[calc(100%-15px)] min-w-0 flex-1 overflow-hidden rounded-[12px]">
       <APIProvider
         apiKey={apiKey}
         libraries={["core", "maps", "geometry", "marker"]}

@@ -1,18 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  /* Optima was the effective macOS fallback here and reads nothing like the
-     reference UI, which is Material/Roboto. */
   --font-calibri: var(--font-roboto), "Segoe UI", "Helvetica Neue", Arial,
     sans-serif;
 }
 
-/*
- * Font scale from the reference app. Note their `* { font-size: 14px }` also
- * hits <html>, so 1rem == 14px there; any rem value copied from their CSS is
- * converted to px here rather than changing our root size (Tailwind spacing
- * is rem-based and would shift with it).
- */
 :root {
 	--font-size-mini: 8px;
 	--font-size-extra-small: 9px;
@@ -46,11 +38,6 @@ body {
 	display: none;
 }
 
-/*
- * .page-name::after -- the trailing notch is a white CSS triangle laid over the
- * chip's right edge (border trick, flipped), not a clip. 18px + 18px tall
- * against a 35px chip, so it overhangs by 1px top and bottom.
- */
 .tab-notch::after {
 	content: "";
 	position: absolute;
@@ -62,7 +49,6 @@ body {
 	transform: rotate(180deg);
 }
 
-/* react-datepicker renders its own wrappers; make them fill the outlined field. */
 .react-datepicker-wrapper,
 .react-datepicker__input-container {
 	height: 100%;
@@ -79,5 +65,102 @@ body {
 	-webkit-appearance: none;
 }
 
+.map-type-toggle {
+	box-sizing: border-box;
+	width: 174px;
+	height: 44px;
+	top: 12px;
+	gap: 0;
+	padding: 0;
+	border: 1px solid #d6e5de;
+	border-radius: 2px;
+	background: transparent;
+	box-shadow: 0 2px 5px rgb(26 158 107 / 18%);
+	overflow: hidden;
+}
 
+.map-type-toggle > button {
+	box-sizing: border-box;
+	min-width: 0;
+	height: 42px;
+	padding: 10px 12px !important;
+	border: 0;
+	border-radius: 0;
+	background: #fff;
+	color: #667085;
+	font-family: var(--font-roboto), "Segoe UI", sans-serif;
+	font-size: 17px;
+	font-weight: 400;
+	line-height: 22px;
+}
+
+.map-type-toggle > button:first-child {
+	width: 60px;
+	border-right: 1px solid #d9dee5;
+}
+
+.map-type-toggle > button:last-child {
+	width: 106px;
+}
+
+.map-type-toggle > button.bg-white {
+	color: #111827;
+	font-weight: 600;
+}
+
+.map-type-toggle > button:hover {
+	background: #f7fbf9;
+}
+
+.map-legend {
+	left: 20px !important;
+	top: 86px !important;
+}
+
+.summary-panel {
+	box-sizing: border-box;
+	border-top-left-radius: 8px;
+}
+
+.summary-scroll-shell {
+	position: relative;
+	min-height: 0;
+	flex: 1;
+	overflow: hidden;
+}
+
+.summary-scroll-area {
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+	scrollbar-width: none;
+}
+
+.summary-scroll-area::-webkit-scrollbar {
+	display: none;
+}
+
+.summary-scroll-track {
+	position: absolute;
+	right: 2px;
+	top: 0;
+	bottom: 0;
+	width: 6px;
+	pointer-events: none;
+}
+
+.summary-scroll-thumb {
+	position: absolute;
+	right: 0;
+	width: 6px;
+	border-radius: 999px;
+	background: #969696;
+	cursor: grab;
+	pointer-events: auto;
+	touch-action: none;
+}
+
+.summary-scroll-thumb:active {
+	cursor: grabbing;
+}
 

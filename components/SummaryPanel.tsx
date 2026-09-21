@@ -5,7 +5,14 @@ import { formatDurationHms, formatReportedAt } from "@/helpers/validate";
 import { useTracking } from "@/hooks/useTracking";
 import { useTripSummary } from "@/hooks/useTripSummary";
 import { Info } from "lucide-react";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import {
+  PointerEvent as ReactPointerEvent,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 const TABS = ["Summary", "Movements", "Events"] as const;
 type Tab = (typeof TABS)[number];
@@ -33,18 +40,18 @@ function Row({
   return (
     <tr>
       {/* 40%: the reference measures ~39% of the card at this width. */}
-      <td className="w-[40%] p-[6px] align-top">
+      <td className="w-[40%] border-b border-[#e1e1e1] py-[10px] pl-[14px] pr-[8px] align-top">
         {/* A block <p>, not a flex row: a flex label cannot wrap, which forces
             the auto-layout column wider than the reference's. */}
-        <p className="text-[13px] font-normal leading-[19.5px] tracking-[0.12194px] text-black">
+        <p className="my-[7px] text-[15px] font-normal leading-[22px] tracking-[0.12194px] text-[#5f6368]">
           {label}
           {info && (
             <Info size={12} className="ml-1 inline-block align-middle text-slate-400" />
           )}
         </p>
       </td>
-      <td className="p-[6px] text-left align-top">
-        <p className="text-[13px] font-bold leading-[19.5px] tracking-[0.12194px] text-[rgba(0,0,0,0.87)]">
+      <td className="border-b border-[#e1e1e1] px-[8px] py-[10px] text-left align-top">
+        <p className="my-[7px] text-[15px] font-bold leading-[22px] tracking-[0.12194px] text-[rgba(0,0,0,0.87)]">
           {value}
         </p>
       </td>
@@ -57,6 +64,94 @@ function EmptyState({ message }: { message: string }) {
     <p className="px-[10px] py-8 text-center text-[13px] text-slate-400">
       {message}
     </p>
+  );
+}
+
+function SummaryScrollContainer({ children }: { children: ReactNode }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const dragStart = useRef({ pointerY: 0, scrollTop: 0 });
+  const [scrollState, setScrollState] = useState({
+    scrollTop: 0,
+    clientHeight: 0,
+    scrollHeight: 0,
+  });
+
+  const updateScrollState = () => {
+    const element = scrollRef.current;
+    if (!element) return;
+    setScrollState({
+      scrollTop: element.scrollTop,
+      clientHeight: element.clientHeight,
+      scrollHeight: element.scrollHeight,
+    });
+  };
+
+  useEffect(() => {
+    updateScrollState();
+    const element = scrollRef.current;
+    if (!element) return;
+
+    element.addEventListener("scroll", updateScrollState, { passive: true });
+    const observer = new ResizeObserver(updateScrollState);
+    observer.observe(element);
+
+    return () => {
+      element.removeEventListener("scroll", updateScrollState);
+      observer.disconnect();
+    };
+  }, [children]);
+
+  const hasOverflow = scrollState.scrollHeight > scrollState.clientHeight;
+  const trackHeight = scrollState.clientHeight;
+  const thumbHeight = hasOverflow
+    ? Math.max(28, (trackHeight / scrollState.scrollHeight) * trackHeight)
+    : 0;
+  const maxThumbTop = Math.max(0, trackHeight - thumbHeight);
+  const maxScrollTop = Math.max(
+    1,
+    scrollState.scrollHeight - scrollState.clientHeight,
+  );
+  const thumbTop = (scrollState.scrollTop / maxScrollTop) * maxThumbTop;
+
+  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const element = scrollRef.current;
+    if (!element) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragStart.current = { pointerY: event.clientY, scrollTop: element.scrollTop };
+  };
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
+    const element = scrollRef.current;
+    if (!element) return;
+    const scrollRange = element.scrollHeight - element.clientHeight;
+    const thumbRange = Math.max(1, trackHeight - thumbHeight);
+    element.scrollTop =
+      dragStart.current.scrollTop +
+      ((event.clientY - dragStart.current.pointerY) / thumbRange) * scrollRange;
+  };
+
+  return (
+    <div className="summary-scroll-shell">
+      <div ref={scrollRef} className="summary-scroll-area">
+        {children}
+      </div>
+      {hasOverflow && (
+        <div className="summary-scroll-track" aria-hidden="true">
+          <div
+            className="summary-scroll-thumb"
+            style={{ height: thumbHeight, transform: `translateY(${thumbTop}px)` }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={(event) => {
+              if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                event.currentTarget.releasePointerCapture(event.pointerId);
+              }
+            }}
+          />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -111,7 +206,8 @@ export default function SummaryPanel() {
   }, [historyData]);
 
   return (
-    <aside className="m-[5px] flex h-[calc(100%-8px)] w-[28%] flex-none flex-col overflow-scroll rounded-[12px] bg-white shadow-[0_0_10px_#0000003d]">
+    <aside className="summary-panel mb-[10px] ml-[5px] mt-[5px] flex h-[calc(100%-15px)] w-[28%] min-h-0 flex-none flex-col overflow-hidden rounded-[5px] bg-white shadow-[0_0_10px_#0000003d]">
+      <SummaryScrollContainer>
       {/*
        * .type-switch-btn--centered centres a fixed 310px bar (3 x 100px buttons
        * plus 5px padding), so it overflows a narrow card rather than shrinking.
@@ -119,7 +215,7 @@ export default function SummaryPanel() {
       <div className="flex shrink-0 justify-center">
         <div
           style={{ background: TAB_GRADIENT }}
-          className="mb-[5px] mt-[6px] flex h-[32.5px] w-[310px] shrink-0 items-center justify-center rounded-[5px] p-[5px]"
+          className="mb-[5px] mt-[6px] flex h-[32.5px] w-[calc(100%-20px)] max-w-[310px] shrink-0 items-center justify-center rounded-[5px] p-[5px]"
         >
           {TABS.map((tab) => {
             const active = activeTab === tab;
@@ -128,7 +224,7 @@ export default function SummaryPanel() {
                 key={tab}
                 type="button"
                 onClick={() => setActiveTab(tab)}
-                className={`w-[100px] cursor-pointer rounded-[5px] text-[13px] font-medium leading-[19.5px] ${
+                className={`min-w-0 flex-1 cursor-pointer rounded-[5px] text-[13px] font-medium leading-[19.5px] ${
                   active ? "bg-white" : "text-white"
                 }`}
               >
@@ -167,7 +263,7 @@ export default function SummaryPanel() {
         </p>
       </div>
 
-      <div className="flex-1">
+      <div className="min-h-0 flex-1">
         {activeTab === "Summary" && (
           <table className="w-full">
             <tbody>
@@ -186,6 +282,9 @@ export default function SummaryPanel() {
               <Row label="Halt Time" value={summary.haltTime} info />
               <Row label="Model" value={truckData?.model || "--"} />
               <Row label="Location" value={location || "--"} />
+              <tr>
+                <td colSpan={2} className="h-[8px] p-0" />
+              </tr>
             </tbody>
           </table>
         )}
@@ -238,6 +337,7 @@ export default function SummaryPanel() {
             </ul>
           ))}
       </div>
+      </SummaryScrollContainer>
     </aside>
   );
 }

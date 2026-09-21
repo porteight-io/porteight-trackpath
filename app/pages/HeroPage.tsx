@@ -22,7 +22,7 @@ export default function HeroPage() {
         <FilterBar />
 
         {/* The map/summary container: flex row, padding 0, overflow hidden. */}
-        <section className="flex min-h-0 flex-1 flex-row overflow-hidden bg-white">
+        <section className="flex min-h-0 flex-1 flex-row gap-[3px] overflow-hidden bg-white">
           <SummaryPanel />
           <MapPanel />
         </section>
