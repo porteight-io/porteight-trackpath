@@ -31,6 +31,11 @@ function getPointStatus(point: HistoryData, next?: HistoryData): PointStatus {
   return travelled < IDLING_MAX_KM ? "idling" : "running";
 }
 
+/** iAlert's own status marker artwork, used by the legend pills. */
+export function getStatusMarkerUrl(status: PointStatus): string {
+  return `https://ialert.ashokleyland.com/images/markers/${status.toUpperCase()}/3.svg`;
+}
+
 /**
  * Thins the raw history down to a readable number of status dots so the route
  * stays legible at any zoom level instead of turning into a solid band.

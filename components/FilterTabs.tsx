@@ -112,21 +112,24 @@ function Field({
   label,
   width,
   borderClass,
+  padClass = "pl-[10.5px] pr-[8px]",
   children,
 }: {
   label: string;
   width: number;
   borderClass: string;
+  /** The reference gives the time fields a tighter box than the date one. */
+  padClass?: string;
   children: ReactNode;
 }) {
   return (
     <div className="relative shrink-0 pr-[10px]">
-      <span className="pointer-events-none absolute left-[8px] top-0 z-10 -translate-y-1/2 bg-white px-[5px] text-[11px] leading-[1.5] text-[#666]">
+      <span className="pointer-events-none absolute left-[10px] top-0 z-10 -translate-y-1/2 bg-white px-[5px] text-[11px] leading-[1.5] text-[#666]">
         {label}
       </span>
       <div
         style={{ width }}
-        className={`flex h-[33px] items-center gap-1 rounded-[5.25px] border pl-[10.5px] pr-[8px] ${borderClass}`}
+        className={`flex h-[33px] items-center gap-1 rounded-[5.25px] bg-white transition-[border-color,box-shadow] duration-150 ease-in-out ${padClass} ${borderClass}`}
       >
         {children}
       </div>
@@ -135,11 +138,11 @@ function Field({
 }
 
 const fieldInputClass =
-  "h-full w-full min-w-0 bg-transparent text-[14px] font-normal leading-[21px] text-[#212529] outline-none placeholder:text-slate-400";
+  "h-full w-full min-w-0 cursor-text appearance-none bg-transparent pb-[5.25px] pt-[10px] text-[14px] font-normal leading-[21px] text-[#212529] outline-none placeholder:text-slate-400";
 
 /** The two time inputs render a step smaller than the date input. */
 const timeInputClass =
-  "h-full w-full min-w-0 bg-transparent text-[13px] font-normal leading-[19.5px] text-[#212529] outline-none placeholder:text-slate-400";
+  "h-full w-full min-w-0 cursor-text appearance-none bg-transparent text-[13px] font-normal leading-[19.5px] text-[#212529] outline-none placeholder:text-slate-400";
 
 const buttonBase =
   "h-[33px] min-w-[64px] cursor-pointer items-center justify-center gap-2 whitespace-nowrap text-[12.25px] font-medium leading-[1.75] tracking-[0.35px] text-white transition-colors duration-[250ms] disabled:cursor-not-allowed disabled:opacity-70";
@@ -334,16 +337,17 @@ export default function FilterBar() {
   };
 
   return (
-    <section className="shrink-0 bg-white pr-5 pt-[11px]">
+    <section className="shrink-0 bg-white pr-[21px] pt-[11px]">
       {error && (
         <p className="mb-2 text-xs font-medium text-red-500">{error}</p>
       )}
 
-      {/* .trace-header: flex, gap 10px, margin-bottom 10px. */}
-      <div className="mb-[10px] flex flex-wrap items-center gap-[10px]">
+      {/* .trace-header: a wrapping flex row, 10px gaps both ways, 10px clear
+          below it and no padding or side margins of its own. */}
+      <div className="mx-0 mb-[10px] mt-0 flex flex-wrap items-center justify-start gap-[10px] p-0 text-[14px] font-normal leading-[21px] tracking-[0.13132px] text-black/87">
         {/* MUI Autocomplete: 236px, input root padded 6px / 65px for the adornment. */}
         <div ref={dropdownRef} className="relative w-[236px] shrink-0">
-          <span className="pointer-events-none absolute left-[8px] top-0 z-10 -translate-y-1/2 bg-white px-[5px] text-[11.25px] leading-[1.5] text-[#666]">
+          <span className="pointer-events-none absolute left-[15px] top-0 z-10 -translate-y-1/2 bg-white px-[5px] text-[11.25px] leading-[1.5] text-[#666]">
             Reg No
           </span>
           <div className="relative flex h-[33px] items-center rounded-[4px] border border-[rgba(0,0,0,0.23)] py-[6px] pl-[6px] pr-[65px]">
@@ -421,8 +425,8 @@ export default function FilterBar() {
         </div>
 
         {/* .trace-header__datetime: 529px of flex with no gap of its own. */}
-        <div className="flex shrink-0">
-          <Field label="Start Date - End Date" width={200} borderClass="border-[#898989]">
+        <div className="flex shrink-0 pl-0">
+          <Field label="Start Date - End Date" width={200} borderClass="border-[0.8px] border-[#898989]">
             <DatePicker
               selectsRange
               selected={startDate}
@@ -440,7 +444,12 @@ export default function FilterBar() {
             <DateRangeIcon size={21} className="shrink-0 text-[#898989]" />
           </Field>
 
-          <Field label="Start Time" width={149.5} borderClass="border-[#d2d2d2]">
+          <Field
+            label="Start Time"
+            width={161.6}
+            borderClass="border-[0.8px] border-[#d2d2d2]"
+            padClass="pb-0 pl-[8px] pr-[4px] pt-[3px]"
+          >
             <TimeInput24
               value={startTime}
               onChange={setStartTime}
@@ -449,7 +458,12 @@ export default function FilterBar() {
             <AccessTimeFilledIcon size={21} className="shrink-0 text-[#898989]" />
           </Field>
 
-          <Field label="End Time" width={149.5} borderClass="border-[#d2d2d2]">
+          <Field
+            label="End Time"
+            width={161.6}
+            borderClass="border-[0.8px] border-[#d2d2d2]"
+            padClass="pb-0 pl-[8px] pr-[4px] pt-[3px]"
+          >
             <TimeInput24
               value={endTime}
               onChange={setEndTime}

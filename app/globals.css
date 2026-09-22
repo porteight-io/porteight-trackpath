@@ -65,47 +65,59 @@ body {
 	-webkit-appearance: none;
 }
 
+/*
+ * The wrapper is sized to the pair exactly -- 40px tall, no border, no padding.
+ * Any of those would inset the buttons from the element's top edge, so the white
+ * boxes would start lower than Playback's despite sharing the same `top`.
+ */
 .map-type-toggle {
 	box-sizing: border-box;
-	width: 174px;
-	height: 44px;
-	top: 12px;
+	width: 168px;
+	height: 40px;
 	gap: 0;
 	padding: 0;
-	border: 1px solid #d6e5de;
-	border-radius: 2px;
+	border: 0;
 	background: transparent;
-	box-shadow: 0 2px 5px rgb(26 158 107 / 18%);
 	overflow: hidden;
 }
 
 .map-type-toggle > button {
 	box-sizing: border-box;
-	min-width: 0;
-	height: 42px;
-	padding: 10px 12px !important;
+	position: relative;
+	height: 40px;
+	padding: 0 17px !important;
+	overflow: hidden;
 	border: 0;
-	border-radius: 0;
 	background: #fff;
-	color: #667085;
+	box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+	color: #565656;
 	font-family: var(--font-roboto), "Segoe UI", sans-serif;
-	font-size: 17px;
+	font-size: 18px;
 	font-weight: 400;
-	line-height: 22px;
+	line-height: normal;
+	text-align: center;
+	vertical-align: middle;
+	appearance: none;
+	cursor: pointer;
+	user-select: none;
 }
 
+/* Only the outer edges are rounded -- the pair reads as one control. */
 .map-type-toggle > button:first-child {
-	width: 60px;
-	border-right: 1px solid #d9dee5;
+	width: 69.5625px;
+	min-width: 36px;
+	border-radius: 2px 0 0 2px;
 }
 
 .map-type-toggle > button:last-child {
-	width: 106px;
+	width: 98.4875px;
+	min-width: 66px;
+	border-radius: 0 2px 2px 0;
 }
 
 .map-type-toggle > button.bg-white {
-	color: #111827;
-	font-weight: 600;
+	color: #000;
+	font-weight: 500;
 }
 
 .map-type-toggle > button:hover {
@@ -113,54 +125,88 @@ body {
 }
 
 .map-legend {
-	left: 20px !important;
+	left: 12px !important;
 	top: 86px !important;
 }
 
-.summary-panel {
-	box-sizing: border-box;
-	border-top-left-radius: 8px;
+/*
+ * A slim pipe-style scrollbar for the summary card: a 5px rounded grey thumb on
+ * a transparent track, with the stepper arrows removed, so the bar reads as a
+ * thin pipe rather than the platform's chrome.
+ *
+ * The standard `scrollbar-*` properties are deliberately quarantined behind the
+ * @supports below: in Chromium, setting either of them switches the element to
+ * the standard scrollbar renderer, which ignores every ::-webkit-scrollbar rule
+ * here -- arrows included, so they come back and still step on click. Only
+ * engines with no ::-webkit-scrollbar support (Firefox) take that branch.
+ */
+.pipe-scrollbar::-webkit-scrollbar {
+	width: 5px;
+	height: 5px;
 }
 
-.summary-scroll-shell {
-	position: relative;
-	min-height: 0;
-	flex: 1;
-	overflow: hidden;
+.pipe-scrollbar::-webkit-scrollbar-track {
+	background: transparent;
 }
 
-.summary-scroll-area {
-	height: 100%;
-	overflow-x: hidden;
-	overflow-y: auto;
-	scrollbar-width: none;
+.pipe-scrollbar::-webkit-scrollbar-thumb {
+	border-radius: 2.5px;
+	background: #9ca3af;
 }
 
-.summary-scroll-area::-webkit-scrollbar {
+/*
+ * Drop the stepper arrows at each end so the bar is just the pipe. The bare
+ * ::-webkit-scrollbar-button selector misses the single/double variants some
+ * platforms draw, so the increment/decrement pairs are zeroed out explicitly --
+ * otherwise a click target survives where the arrow used to be.
+ */
+.pipe-scrollbar::-webkit-scrollbar-button,
+.pipe-scrollbar::-webkit-scrollbar-button:start:decrement,
+.pipe-scrollbar::-webkit-scrollbar-button:end:increment,
+.pipe-scrollbar::-webkit-scrollbar-button:start:increment,
+.pipe-scrollbar::-webkit-scrollbar-button:end:decrement {
 	display: none;
+	width: 0;
+	height: 0;
+	background: transparent;
 }
 
-.summary-scroll-track {
-	position: absolute;
-	right: 2px;
-	top: 0;
-	bottom: 0;
-	width: 6px;
-	pointer-events: none;
+@supports not selector(::-webkit-scrollbar) {
+	.pipe-scrollbar {
+		scrollbar-width: thin;
+		scrollbar-color: #9ca3af transparent;
+	}
 }
 
-.summary-scroll-thumb {
-	position: absolute;
-	right: 0;
-	width: 6px;
-	border-radius: 999px;
-	background: #969696;
-	cursor: grab;
-	pointer-events: auto;
-	touch-action: none;
+.pipe-scrollbar::-webkit-scrollbar-corner {
+	background: transparent;
 }
 
-.summary-scroll-thumb:active {
-	cursor: grabbing;
+/*
+ * Google paints the map into transformed/absolutely-positioned children that
+ * routinely escape an ancestor's `overflow: hidden`, leaving square corners on
+ * the rounded card. Isolating the container and handing the radius down to the
+ * generated wrappers makes the corners clip cleanly.
+ */
+.map-surface {
+	isolation: isolate;
 }
 
+.map-surface > div,
+.map-surface .gm-style,
+.map-surface .gm-style > div:first-child {
+	border-radius: inherit;
+}
+
+/*
+ * The summary card's drop shadow, minus the right edge -- that side butts up
+ * against the map, where the halo reads as a seam. One shadow per remaining
+ * side, each with a negative spread equal to the offset so it stays contained
+ * rather than bleeding around the corners.
+ */
+.shadow-no-right {
+	box-shadow:
+		-5px 0 10px -5px rgba(0, 0, 0, 0.24),
+		0 -5px 10px -5px rgba(0, 0, 0, 0.24),
+		0 5px 10px -5px rgba(0, 0, 0, 0.24);
+}

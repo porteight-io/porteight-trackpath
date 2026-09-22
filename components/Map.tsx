@@ -1,6 +1,11 @@
 "use client";
 
-import { getTrackDots, PointStatus, STATUS_COLORS } from "@/helpers/trackPoints";
+import {
+  getStatusMarkerUrl,
+  getTrackDots,
+  PointStatus,
+  STATUS_COLORS,
+} from "@/helpers/trackPoints";
 import { useTracking } from "@/hooks/useTracking";
 import {
   AdvancedMarker,
@@ -9,8 +14,13 @@ import {
   useMap,
   useMapsLibrary,
 } from "@vis.gl/react-google-maps";
-import { Maximize2, Menu, Play } from "lucide-react";
+import { Menu } from "lucide-react";
+import { FullscreenCornersIcon, PlaybackIcon } from "./HeaderIcons";
 import { useEffect, useMemo, useRef, useState } from "react";
+
+const BRAND_GRADIENT = "linear-gradient(to right, #00a071, #194d94)";
+const START_GREEN = "#00D770";
+const END_RED = "#D70000";
 
 const LEGEND: { status: PointStatus; label: string }[] = [
   { status: "running", label: "Running" },
@@ -47,28 +57,44 @@ function Polyline() {
   return null;
 }
 
-function PinMarker({ color, letter }: { color: string; letter: string }) {
+/** Start / end map pin: solid teardrop with a white disc and the letter inside. */
+function PinMarker({ letter, color }: { letter: string; color: string }) {
   return (
-    <div className="relative h-[42px] w-[31px]">
-      <svg viewBox="0 0 24 33" className="h-full w-full drop-shadow-md">
-        <path
-          d="M12 0C5.373 0 0 5.373 0 12c0 8.4 12 21 12 21s12-12.6 12-21c0-6.627-5.373-12-12-12z"
-          fill={color}
-        />
-      </svg>
-      <span className="absolute inset-x-0 top-[5px] text-center text-[14px] font-bold leading-none text-white">
+    <svg
+      width="34"
+      height="44"
+      viewBox="0 0 34 44"
+      aria-hidden="true"
+      className="block"
+    >
+      <path
+        d="M17 0C7.611 0 0 7.611 0 17c0 7.5 10.5 20.5 15.2 25.9a2.4 2.4 0 0 0 3.6 0C23.5 37.5 34 24.5 34 17 34 7.611 26.389 0 17 0Z"
+        fill={color}
+      />
+      <circle cx="17" cy="17" r="10.5" fill="#ffffff" />
+      <text
+        x="17"
+        y="17.5"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={color}
+        fontSize="16"
+        fontWeight="700"
+      >
         {letter}
-      </span>
-    </div>
+      </text>
+    </svg>
   );
 }
 
 function LegendPill({
+  status,
   label,
   color,
   active,
   onToggle,
 }: {
+  status: PointStatus;
   label: string;
   color: string;
   active: boolean;
@@ -84,7 +110,7 @@ function LegendPill({
       }`}
     >
       <img
-        src={`https://ialert.ashokleyland.com/images/markers/${label.toUpperCase()}/3.svg`}
+        src={getStatusMarkerUrl(status)}
         alt=""
         className="h-5 w-6 shrink-0 object-contain"
       />
@@ -142,8 +168,10 @@ function MapContent() {
           <>
             <AdvancedMarker
               position={trackPath[0]}
-              title="Start"            >
-              <PinMarker color="#1a9e6b" letter="S" />
+              title="Start"
+              zIndex={2}
+            >
+              <PinMarker letter="S" color={START_GREEN} />
             </AdvancedMarker>
 
             {dots
@@ -163,35 +191,34 @@ function MapContent() {
 
             <AdvancedMarker
               position={trackPath[trackPath.length - 1]}
-              title="End"            >
-              <PinMarker color="#e0393e" letter="E" />
+              title="End"
+              zIndex={2}
+            >
+              <PinMarker letter="E" color={END_RED} />
             </AdvancedMarker>
           </>
         )}
         <Polyline />
       </Map>
 
-      <div className="map-type-toggle absolute left-2 top-4 z-10 flex rounded-lg bg-[#eef0f3] p-1 shadow-md">
+      <div className="map-type-toggle absolute left-2 top-[6px] z-10 flex">
         {(["roadmap", "satellite"] as const).map((type) => (
           <button
             key={type}
             type="button"
             onClick={() => setMapType(type)}
-            className={`cursor-pointer rounded-md px-6 py-2 text-[15px] transition-colors ${
-              mapType === type
-                ? "bg-white font-semibold text-slate-900 shadow-sm"
-                : "text-slate-600"
-            }`}
+            className={`transition-colors ${mapType === type ? "bg-white" : ""}`}
           >
             {type === "roadmap" ? "Map" : "Satellite"}
           </button>
         ))}
       </div>
 
-      <div className="map-legend absolute left-4 top-[76px] z-10 flex flex-col items-start gap-3">
+      <div className="map-legend absolute left-4 top-[76px] z-10 flex flex-col items-start gap-4">
         {LEGEND.map(({ status, label }) => (
           <LegendPill
             key={status}
+            status={status}
             label={label}
             color={STATUS_COLORS[status]}
             active={visibleStatuses[status]}
@@ -205,17 +232,23 @@ function MapContent() {
         ))}
       </div>
 
-      <div className="absolute right-4 top-4 z-10 flex items-center gap-4">
+      <div className="absolute right-[2px] top-[6px] z-10 flex items-start gap-4">
         <button
           type="button"
           onClick={() => alert("Play!")}
-          className="flex cursor-pointer items-center gap-3 rounded-[10px] bg-white py-1.5 pl-5 pr-1.5 shadow-md"
+          className="flex h-[44px] w-[110px] cursor-pointer items-center justify-between rounded-[10px] bg-white p-[10px] shadow-md"
         >
           <span className="text-[15px] font-semibold text-slate-700">
             Playback
           </span>
-          <span className="grid h-8 w-8 place-items-center rounded-full bg-[#1a9e6b]">
-            <Play size={14} fill="#ffffff" className="translate-x-px text-white" />
+          <span
+            style={{ background: BRAND_GRADIENT }}
+            className="grid h-6 w-6 shrink-0 place-items-center rounded-full"
+          >
+            <PlaybackIcon
+              size={24}
+              className="shrink-0 cursor-pointer select-none overflow-hidden align-middle text-white transition-[fill] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]"
+            />
           </span>
         </button>
 
@@ -223,15 +256,16 @@ function MapContent() {
           type="button"
           onClick={toggleFullscreen}
           title="Toggle fullscreen"
-          className="grid h-11 w-11 cursor-pointer place-items-center rounded-md bg-white shadow-md"
+          className="grid h-[40px] w-[40px] cursor-pointer place-items-center rounded-[2px] border-0 bg-white shadow-[0_1px_4px_-1px_rgba(0,0,0,0.3)]"
         >
-          <Maximize2 size={20} className="text-slate-700" strokeWidth={1.8} />
+          <FullscreenCornersIcon size={20} className="text-slate-700" />
         </button>
       </div>
 
       <button
         type="button"
-        className="absolute right-5 top-1/2 z-10 grid h-14 w-14 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-[#0e7c57] shadow-xl"
+        style={{ background: BRAND_GRADIENT }}
+        className="absolute right-0 top-1/2 z-10 grid h-[50px] w-[50px] -translate-y-1/2 cursor-pointer place-items-center rounded-full px-[10.5px] py-[5.25px] shadow-xl"
         title="Map options"
       >
         <Menu size={24} className="text-white" />
@@ -244,7 +278,7 @@ export default function MapPanel() {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
 
   return (
-    <section className="relative mb-[10px] mr-[5px] mt-[2px] h-[calc(100%-15px)] min-w-0 flex-1 overflow-hidden rounded-[12px]">
+    <section className="map-surface relative mb-[6px] mr-[25px] mt-0 h-[calc(100%-6px)] min-w-0 flex-1 overflow-hidden rounded-[8px] border border-[#e5e5e5] shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
       <APIProvider
         apiKey={apiKey}
         libraries={["core", "maps", "geometry", "marker"]}

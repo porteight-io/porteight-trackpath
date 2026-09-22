@@ -54,7 +54,7 @@ export default function TopBar() {
                * that is what `position: relative` here is for, and why the chip
                * measures 134.75px despite a full-size icon and a real gutter.
                */}
-              <MenuToggleIcon className="absolute left-full top-1/2 ml-[12px] -translate-y-1/2" />
+              <MenuToggleIcon className="absolute left-full top-1/2 mx-[10px] my-0 -translate-y-1/2" />
             </span>
           </p>
         </div>

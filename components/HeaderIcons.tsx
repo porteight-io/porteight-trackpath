@@ -94,3 +94,26 @@ export function NotificationsIcon({ size = 21, className }: IconProps) {
     </svg>
   );
 }
+
+/** Material PlayArrowIcon — the map's Playback button. */
+export function PlaybackIcon({ size = 21, className }: IconProps) {
+  return (
+    <svg {...base(size, "0 0 24 24")} className={className}>
+      <path d="M8 5v14l11-7z" fill="currentColor" />
+      <title>Playback</title>
+    </svg>
+  );
+}
+
+/** Four corner brackets — the map's fullscreen button, right of Playback. */
+export function FullscreenCornersIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg {...base(size, "0 0 18 18")} className={className}>
+      <path
+        d="M0 0v6h2V2h4V0zm16 0h-4v2h4v4h2V0zm0 16h-4v2h6v-6h-2zM2 12H0v6h6v-2H2z"
+        fill="currentColor"
+      />
+      <title>Fullscreen</title>
+    </svg>
+  );
+}
