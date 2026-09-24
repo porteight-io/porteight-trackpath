@@ -4,9 +4,9 @@ import { getSegmentDistanceKm } from "./calculateDistance";
 export type PointStatus = "running" | "idling" | "stopped";
 
 export const STATUS_COLORS: Record<PointStatus, string> = {
-  running: "#16a34a",
-  stopped: "#dc2626",
-  idling: "#d97706",
+  running: "#1fc21f",
+  stopped: "#e01010",
+  idling: "#f59e0b",
 };
 
 /** A point moving less than this between two reports counts as idling, not running. */
@@ -37,10 +37,13 @@ export function getStatusMarkerUrl(status: PointStatus): string {
 }
 
 /**
- * Thins the raw history down to a readable number of status dots so the route
- * stays legible at any zoom level instead of turning into a solid band.
+ * One status dot per reported point along the route. Very long histories are
+ * thinned to `maxDots` so the map stays responsive.
  */
-export function getTrackDots(points: HistoryData[], maxDots = 28): TrackDot[] {
+export function getTrackDots(
+  points: HistoryData[],
+  maxDots = 1500,
+): TrackDot[] {
   if (points.length < 3) return [];
 
   const inner = points.slice(1, -1);

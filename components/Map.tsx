@@ -15,12 +15,17 @@ import {
   useMapsLibrary,
 } from "@vis.gl/react-google-maps";
 import { Menu } from "lucide-react";
-import { FullscreenCornersIcon, PlaybackIcon } from "./HeaderIcons";
+import {
+  ExitFullscreenCornersIcon,
+  FullscreenCornersIcon,
+  PlaybackIcon,
+} from "./HeaderIcons";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const BRAND_GRADIENT = "linear-gradient(to right, #00a071, #194d94)";
 const START_GREEN = "#00D770";
 const END_RED = "#D70000";
+const ROUTE_BLUE = "#1e77e8";
 
 const LEGEND: { status: PointStatus; label: string }[] = [
   { status: "running", label: "Running" },
@@ -40,9 +45,9 @@ function Polyline() {
     const polyline = new mapsLibrary.Polyline({
       path: trackPath,
       geodesic: true,
-      strokeColor: "#1e77e8",
+      strokeColor: ROUTE_BLUE,
       strokeOpacity: 1,
-      strokeWeight: 5,
+      strokeWeight: 3,
     });
 
     polyline.setMap(map);
@@ -114,7 +119,9 @@ function LegendPill({
         alt=""
         className="h-5 w-6 shrink-0 object-contain"
       />
-      <span className="whitespace-nowrap text-[12px] font-semibold text-slate-800">{label}</span>
+      <span className="whitespace-nowrap text-[12px] font-semibold text-slate-800">
+        {label}
+      </span>
       <svg
         viewBox="0 0 24 24"
         aria-hidden="true"
@@ -141,6 +148,16 @@ function MapContent() {
 
   const dots = useMemo(() => getTrackDots(historyData), [historyData]);
 
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Follows the document rather than the click, so Esc also swaps the icon back.
+  useEffect(() => {
+    const onChange = () =>
+      setIsFullscreen(document.fullscreenElement === wrapperRef.current);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
+
   const toggleFullscreen = () => {
     if (document.fullscreenElement) {
       document.exitFullscreen();
@@ -166,11 +183,7 @@ function MapContent() {
       >
         {trackPath.length > 0 && (
           <>
-            <AdvancedMarker
-              position={trackPath[0]}
-              title="Start"
-              zIndex={2}
-            >
+            <AdvancedMarker position={trackPath[0]} title="Start" zIndex={2}>
               <PinMarker letter="S" color={START_GREEN} />
             </AdvancedMarker>
 
@@ -183,7 +196,7 @@ function MapContent() {
                   anchorTop="-50%"
                 >
                   <span
-                    className="block h-[11px] w-[11px] rounded-full"
+                    className="block h-[8px] w-[8px] rounded-full"
                     style={{ backgroundColor: STATUS_COLORS[dot.status] }}
                   />
                 </AdvancedMarker>
@@ -258,7 +271,11 @@ function MapContent() {
           title="Toggle fullscreen"
           className="grid h-[40px] w-[40px] cursor-pointer place-items-center rounded-[2px] border-0 bg-white shadow-[0_1px_4px_-1px_rgba(0,0,0,0.3)]"
         >
-          <FullscreenCornersIcon size={20} className="text-slate-700" />
+          {isFullscreen ? (
+            <ExitFullscreenCornersIcon size={20} className="text-[#333]" />
+          ) : (
+            <FullscreenCornersIcon size={20} className="text-slate-700" />
+          )}
         </button>
       </div>
 

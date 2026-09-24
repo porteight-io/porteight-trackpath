@@ -17,9 +17,9 @@ type Tab = (typeof TABS)[number];
 const TAB_GRADIENT = "linear-gradient(to right, #00a071, #194d94)";
 
 /**
- * summary-table__cell: 16px padding, 14px/21px type. The value column is not a
+ * summary-table__cell: 6px padding, 13px/19.5px type. The label column is not a
  * fixed width -- the table's auto layout shares surplus width between the two
- * columns by content, so the split tracks the card.
+ * columns by content, so the split tracks the card (~43% at 256px, ~39% at 376px).
  */
 function Row({
   label,
@@ -32,25 +32,22 @@ function Row({
 }) {
   return (
     <tr>
-      {/* 112.637px less 32px of padding leaves ~81px, so the two-word labels
-          wrap -- which is what the reference's 74.8px row height reflects. */}
-      <td className="h-[74.8px] w-[112.637px] min-w-[110px] border-b-[0.8px] border-b-[#e0e0e0] p-[16px] text-left align-middle text-[12.25px] font-normal leading-[17.5175px] tracking-[0.131197px]">
-        {/* A block <p>, not a flex row, so the info icon trails the text
-            inline rather than being pushed to the cell's far edge. */}
-        <p className="text-[14px] font-normal leading-[21px] tracking-[0.12194px] text-[rgba(0,0,0,0.6)]">
+      {/* 40%: the reference measures ~39% of the card at this width. */}
+      <td className="w-[40%] p-[6px] align-top">
+        {/* A block <p>, not a flex row: a flex label cannot wrap, which forces
+            the auto-layout column wider than the reference's. */}
+        <p className="text-[13px] font-normal leading-[19.5px] tracking-[0.12194px] text-black">
           {label}
           {info && (
             <Info size={12} className="ml-1 inline-block align-middle text-slate-400" />
           )}
         </p>
       </td>
-      <td className="w-[137.8px] border-b border-slate-200 p-[16px] text-left align-top">
-        <p className="text-[14px] font-normal leading-[21px] tracking-[0.12194px] text-[rgba(0,0,0,0.87)]">
+      <td className="p-[6px] text-left align-top">
+        <p className="text-[13px] font-bold leading-[19.5px] tracking-[0.12194px] text-[rgba(0,0,0,0.87)]">
           {value}
         </p>
       </td>
-      {/* Carries the rule across the slack the two pinned columns leave. */}
-      <td className="border-b border-slate-200" />
     </tr>
   );
 }
@@ -114,7 +111,7 @@ export default function SummaryPanel() {
   }, [historyData]);
 
   return (
-    <aside className="pipe-scrollbar m-[5px] flex h-[calc(100%-10px)] w-[calc(25%+40px)] flex-none flex-col overflow-y-auto overflow-x-hidden rounded-[4px] rounded-tl-[12px] rounded-tr-[5px] bg-white p-0 text-[14px] font-normal leading-[21px] tracking-[0.13132px] text-black/87 shadow-no-right">
+    <aside className="m-[5px] flex h-[calc(100%-8px)] w-[28%] flex-none flex-col overflow-scroll rounded-[12px] bg-white shadow-[0_0_10px_#0000003d]">
       {/*
        * .type-switch-btn--centered centres a fixed 310px bar (3 x 100px buttons
        * plus 5px padding), so it overflows a narrow card rather than shrinking.
@@ -122,7 +119,7 @@ export default function SummaryPanel() {
       <div className="flex shrink-0 justify-center">
         <div
           style={{ background: TAB_GRADIENT }}
-          className="mb-0 mt-[6px] flex h-[32.5px] w-[310px] shrink-0 items-center justify-center rounded-[5px] p-[5px]"
+          className="mb-[5px] mt-[6px] flex h-[32.5px] w-[310px] shrink-0 items-center justify-center rounded-[5px] p-[5px]"
         >
           {TABS.map((tab) => {
             const active = activeTab === tab;
@@ -156,13 +153,13 @@ export default function SummaryPanel() {
         </div>
       </div>
 
-      {/* .vehicle-regn-status: 10px in from the top and left. */}
-      <div className="ml-[10px] mt-[10px] flex h-[35px] w-[240.44px] shrink-0 items-center">
-        <p className="text-[14px] font-normal leading-[21px] tracking-[0.12194px] text-[rgba(0,0,0,0.87)]">
+      {/* .vehicle-regn-status: 10px in from the top and left, 25px tall. */}
+      <div className="ml-[10px] mt-[10px] flex h-[25px] shrink-0 items-center">
+        <p className="text-[13px] font-bold leading-[19.5px] tracking-[0.12194px] text-[rgba(0,0,0,0.87)]">
           {truckData?.truck_no || "--"}
         </p>
         <p
-          className={`ml-0 rounded-[6px] px-[8px] py-[2px] text-[14px] font-normal leading-[21px] text-white ${
+          className={`ml-[10px] rounded-[6px] px-[8px] py-[2px] text-[14px] font-normal leading-[21px] text-white ${
             isRunning ? "bg-[#0a8f3c]" : "bg-[#d80303]"
           }`}
         >
@@ -172,8 +169,13 @@ export default function SummaryPanel() {
 
       <div className="flex-1">
         {activeTab === "Summary" && (
-          <table className="mt-[26px] w-[500px] table-fixed border-collapse border-y border-slate-200">
+          <table className="w-full">
             <tbody>
+              {/* The reference opens with an empty 12px spacer row. */}
+              <tr>
+                <td className="p-[6px]" />
+                <td className="p-[6px]" />
+              </tr>
               <Row label="Last Reported" value={summary.lastReported} />
               <Row label="Distance" value={summary.distance} />
               <Row label="Fuel Consumed" value={summary.fuelConsumed} />
@@ -184,13 +186,6 @@ export default function SummaryPanel() {
               <Row label="Halt Time" value={summary.haltTime} info />
               <Row label="Model" value={truckData?.model || "--"} />
               <Row label="Location" value={location || "--"} />
-              {/* Mirrors the top spacer, so the closing rule sits 16px clear of
-                  the last value. */}
-              <tr>
-                <td className="p-[8px]" />
-                <td className="p-[8px]" />
-                <td className="p-[8px]" />
-              </tr>
             </tbody>
           </table>
         )}

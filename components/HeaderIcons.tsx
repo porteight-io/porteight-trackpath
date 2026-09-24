@@ -117,3 +117,16 @@ export function FullscreenCornersIcon({ size = 20, className }: IconProps) {
     </svg>
   );
 }
+
+/** Inward corner brackets — the map's button while in fullscreen. */
+export function ExitFullscreenCornersIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg {...base(size, "0 0 18 18")} className={className}>
+      <path
+        d="M4 4H0v2h6V0H4zm10 0V0h-2v6h6V4zm-2 14h2v-4h4v-2h-6zM0 14h4v4h2v-6H0z"
+        fill="currentColor"
+      />
+      <title>Exit fullscreen</title>
+    </svg>
+  );
+}
